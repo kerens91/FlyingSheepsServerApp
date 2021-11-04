@@ -4,6 +4,6 @@ import card.AbstractCard;
 import game.player.Player;
 
 public interface ICoupledCard {
-	public abstract Boolean isCouple(AbstractCard card);
-	public abstract void doCouple(Player player);
+	Boolean isCouple(AbstractCard card);
+	void doCouple(Player player);
 }
