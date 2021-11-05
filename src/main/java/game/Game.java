@@ -36,13 +36,14 @@ public class Game {
 	private Boolean isGameCreated; 	// set when the game is created
 	private Boolean isGameActive; 	// set when the game starts
 	private String password;		// generated when game created
+	
 	private PlayersManager playersManager;
-
     private Deck deck;				// Deck of cards
     private TurnsLinkedList turns;	// linkedlist implementing players turns
+    private GameAttackHandler attackHandler;
+    private EventNotifier gameNotifier;
     
     private GameOver gameOverInfo;
-    private GameAttackHandler attackHandler;
     
     private Boolean showCoopBtn;
 	private int specialCardBombID;
@@ -50,7 +51,6 @@ public class Game {
 	private int specialCardHusbandID;
 	private int specialCardWifeID;
 	
-	private IGameNotifications gameNotificationsCallback;
 	
 	private static Game game_instance = null;
 	
@@ -60,6 +60,7 @@ public class Game {
         isGameActive = false;
         turns = new TurnsLinkedList();
         playersManager = new PlayersManager();
+        gameNotifier = new EventNotifier();
         initCardsMembers();
     }
     
@@ -70,8 +71,8 @@ public class Game {
     	return game_instance;
     }
     
-    public void registerCallback (GameManager notificationsCallback) {
-    	gameNotificationsCallback = (IGameNotifications)notificationsCallback;
+	public void registerCallback (GameManager notificationsCallback) {
+		gameNotifier.registerCallback(notificationsCallback);
     	attackHandler.registerCallback((IAttackNotifications)notificationsCallback);
     }
     
@@ -220,50 +221,7 @@ public class Game {
     	return c.getCardInfo();
     }
     
-    private void notifyGameEventActivePlayers(int numPlayers) {
-    	if (gameNotificationsCallback != null) {
-    		gameNotificationsCallback.onNumberOfActivePlayersChanged(numPlayers);
-    	}
-    	else {
-    		logger.error("callback is null");
-    	}
-    }
     
-    private void notifyGameEventCardUsed(CardModel card) {
-    	if (gameNotificationsCallback != null) {
-    		gameNotificationsCallback.onCardUsed(card);
-    	}
-    	else {
-    		logger.error("callback is null");
-    	}
-    }
-    
-    private void notifyGameEventEndTurn(String currentPlayer) {
-    	if (gameNotificationsCallback != null) {
-    		gameNotificationsCallback.onCurrentPlayerChanged(currentPlayer);
-    	}
-    	else {
-    		logger.error("callback is null");
-    	}
-    }
-    
-    private void notifyGameEventGameOver() {
-    	if (gameNotificationsCallback != null) {
-    		gameNotificationsCallback.onPlayerWinGame(gameOverInfo);
-    	}
-    	else {
-    		logger.error("callback is null");
-    	}
-    }
-    
-    private void notifyPlayerLostGame(String playerId) {
-    	if (gameNotificationsCallback != null) {
-    		gameNotificationsCallback.onPlayerLostGame(playerId);
-    	}
-    	else {
-    		logger.error("callback is null");
-    	}
-	}
 	
 	public void showCoopButtonIfNeeded() {
 		int invalidCardId = configs.getIntProperty(Constants.INVALID_CARD_ID);
@@ -288,7 +246,7 @@ public class Game {
 	public Boolean addActivePlayer(String playerId, String name, String img) {
     	if (playersManager.addActivePlayer(playerId, name, img)) {
     		logger.info("A new Player is added to the game");
-            notifyGameEventActivePlayers(playersManager.getNumOfActivePlayers());
+    		gameNotifier.activePlayers(playersManager.getNumOfActivePlayers());
             return true;
     	}
     	return false;
@@ -303,7 +261,7 @@ public class Game {
 	}
 	
     private void putInUsedcardsPile(AbstractCard card) {
-		notifyGameEventCardUsed(card.getCardInfo());
+    	gameNotifier.cardUsed(card.getCardInfo());
 	}
 	
 	/*
@@ -377,10 +335,6 @@ public class Game {
     		}
     	}
     }
-	
-	public void playerPickedCardFromDeck(String playerId) {
-		
-	}
 	
 	public void getCardFromDeck(String playerId) {
 		getCardFromDeck(playersManager.getPlayer(playerId));
@@ -592,7 +546,7 @@ public class Game {
     	if (isGameActive) {
     		turns.nextPlayerTurn();
         	String currentPlayer = turns.getCurrentPlayerId();
-        	notifyGameEventEndTurn(currentPlayer);
+        	gameNotifier.endTurn(currentPlayer);
     	}
     }
     
@@ -628,7 +582,7 @@ public class Game {
      * notify all players that the game is over
      */
     private void gameOver() {
-    	notifyGameEventGameOver();
+    	gameNotifier.gameOver(gameOverInfo);
     }
     
     /*
@@ -652,7 +606,7 @@ public class Game {
         	turns.setActive(victim.getId(), false);
         	victim.setActive(false);
         	playersManager.decreaseNumOfActivePlayers();
-        	notifyPlayerLostGame(victim.getId());
+        	gameNotifier.lostGame(victim.getId());
     	}
     	
     	return isGameOver;
