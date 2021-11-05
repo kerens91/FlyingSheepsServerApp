@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -168,8 +169,8 @@ public class SocketHandler implements Runnable{
 		client.sendPlayerLostGame();
 	}
 	
-	public void sendMultipleClientsAttackMsg(ArrayList<String> clientsIds, AttackMsg msg) {
-		for (String id : clientsIds) {
+	public void sendMultipleClientsAttackMsg(List<String> list, AttackMsg msg) {
+		for (String id : list) {
 			sendClientAttackMsg(id, msg);
 		}
 	}

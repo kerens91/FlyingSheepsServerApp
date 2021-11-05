@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import eventnotifications.IClientRequestNotifications;
 import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
 import game.player.Player;
+import globals.Constants;
 import serverConnections.SocketHandler;
 
 public class GameManager implements IGameNotifications, ICardNotifications, IPlayerNotifications, IClientRequestNotifications, IAttackNotifications {
@@ -56,29 +58,29 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 
 	@Override
 	public void onNumberOfActivePlayersChanged(int numOfPlayers) {
-		Boolean allPlayersJoined = false;
-		allPlayersJoined = game.allPlayersJoined();
-		if (!allPlayersJoined) {
-			logger.info("Sending broadcast with number of active players");
-			socketsHandler.sendBroadcastNumActivePlayers(numOfPlayers);
+		int playersJoined = game.allPlayersJoined();
+		if (playersJoined == Constants.ALL_PLAYERS_JOINED) {
+			startNewGame();
 		}
 		else
 		{
-			startNewGame();
+			logger.info("Sending broadcast with number of active players");
+			socketsHandler.sendBroadcastNumActivePlayers(numOfPlayers);
 		}
 		
 	}
 
-	private void notifyAttackOnVictim() {
-		AttackMsg msg;
-		
+	private void notifyAttackOnVictim() {	
 		String victim = attackHandler.getVictim();
-		msg = attackHandler.notifyAttackGetVictimMsg();
-		socketsHandler.sendClientAttackMsg(victim, msg);
 		
-		ArrayList<String> activePlayers = game.getActivePlayers(victim);
-		msg = attackHandler.notifyAttackGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
+		socketsHandler.sendClientAttackMsg(
+				victim, 
+				attackHandler.notifyAttackGetVictimMsg());
+		
+		List<String> activePlayers = game.getActivePlayers(victim);
+		socketsHandler.sendMultipleClientsAttackMsg(
+				activePlayers, 
+				attackHandler.notifyAttackGetAllPlayersMsg());
 		
 		game.nextAttackState();
 	}
@@ -106,7 +108,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 		msg = attackHandler.rockAttSucGetVictimMsg();
 		socketsHandler.sendClientAttackMsg(victim, msg);
 		
-		ArrayList<String> activePlayers = game.getActivePlayers(victim);
+		List<String> activePlayers = game.getActivePlayers(victim);
 		msg = attackHandler.rockAttSucGetAllPlayersMsg();
 		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
 		
@@ -132,7 +134,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 		msg = attackHandler.stealAttSucGetAttMsg();
 		socketsHandler.sendClientAttackMsg(attacker, msg);
 				
-		ArrayList<String> activePlayers = game.getActivePlayers(victim, attacker);
+		List<String> activePlayers = game.getActivePlayers(victim, attacker);
 		msg = attackHandler.stealAttSucGetAllPlayersMsg();
 		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
 		
@@ -141,11 +143,10 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void stealAttackFailed() {
-		AttackMsg msg;
-		
-		ArrayList<String> activePlayers = game.getActivePlayers();
-		msg = attackHandler.stealAttFailedGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
+
+		socketsHandler.sendMultipleClientsAttackMsg(
+				game.getActivePlayers(), 
+				attackHandler.stealAttFailedGetAllPlayersMsg());
 				
 		game.nextAttackState();
 	}
@@ -161,7 +162,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 		AttackMsg msg;
 
 		String attacker = attackHandler.getAttacker();
-		ArrayList<String> activePlayers = game.getActivePlayers(attacker);
+		List<String> activePlayers = game.getActivePlayers(attacker);
 		msg = attackHandler.riverAttSucGetAllPlayersMsg();
 		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
 		
@@ -181,7 +182,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 		msg = attackHandler.treeAttSucGetAttMsg(game.getSpecialCardsOwners());
 		socketsHandler.sendClientAttackMsg(attacker, msg);
 						
-		ArrayList<String> activePlayers = game.getActivePlayers(attacker);
+		List<String> activePlayers = game.getActivePlayers(attacker);
 		msg = attackHandler.treeAttGetAllPlayersMsg();
 		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
 		
@@ -196,7 +197,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 		msg = attackHandler.treeAttFailGetAttMsg();
 		socketsHandler.sendClientAttackMsg(attacker, msg);
 						
-		ArrayList<String> activePlayers = game.getActivePlayers(attacker);
+		List<String> activePlayers = game.getActivePlayers(attacker);
 		msg = attackHandler.treeAttGetAllPlayersMsg();
 		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
 		
@@ -213,11 +214,9 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	public void natureDisasterAttackSucceeded() {
 		game.doNatureDisasterAttack();
 		
-		AttackMsg msg;
-
-		ArrayList<String> activePlayers = game.getActivePlayers();
-		msg = attackHandler.natureAttSucGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
+		socketsHandler.sendMultipleClientsAttackMsg(
+				game.getActivePlayers(), 
+				attackHandler.natureAttSucGetAllPlayersMsg());
 		
 		game.nextAttackState();
 	}
@@ -226,9 +225,8 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	public void natureDisasterAttackFailed() {
 		AttackMsg msg;
 
-		ArrayList<String> activePlayers = game.getActivePlayers();
 		msg = attackHandler.natureAttFailGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
+		socketsHandler.sendMultipleClientsAttackMsg(game.getActivePlayers(), msg);
 		
 		game.nextAttackState();
 	}
@@ -330,8 +328,9 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 			socketsHandler.setClientActive(clientId);
 			
 			// if this is the last player added - no need to send msg
-			if (!game.allPlayersJoined()) {
-				socketsHandler.sendClientGameStart(clientId, game.getNumOfActivePlayers());
+			int joined = game.allPlayersJoined();
+			if (joined != Constants.ALL_PLAYERS_JOINED ) {
+				socketsHandler.sendClientGameStart(clientId, joined);
 			}
 		}
 		else {

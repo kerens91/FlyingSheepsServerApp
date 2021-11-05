@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -119,7 +120,7 @@ public class GameAttackHandler {
     	return msg;
     }
     
-    public AttackMsg getMsgList(int destination, ArrayList<String> list) {
+    public AttackMsg getMsgList(int destination, List<String> list) {
     	System.out.println("state = " + attackState.getState().getStateId());
     	AttackMsgInfo info = attackState.getState().getMsgInfo(destination);
     	AttackMsg msg = new AttackMsg(info.getMsgType());
@@ -188,8 +189,8 @@ public class GameAttackHandler {
      * to ask the attacker who is the victim
      * created the Type.list type message
      */
-    public AttackMsg preAttackGetMsg(ArrayList<String> activePlayers) {
-    	return getMsgList(Constants.DEST_ATTACKER, activePlayers);
+    public AttackMsg preAttackGetMsg(List<String> list) {
+    	return getMsgList(Constants.DEST_ATTACKER, list);
     }
     
     /*
@@ -285,8 +286,8 @@ public class GameAttackHandler {
      * to inform attacker with owners list
      * created the Type.list type message
      */
-    public AttackMsg treeAttSucGetAttMsg(ArrayList<String> owners) {
-    	return getMsgList(Constants.DEST_ATTACKER, owners);
+    public AttackMsg treeAttSucGetAttMsg(List<String> list) {
+    	return getMsgList(Constants.DEST_ATTACKER, list);
     }
     
     /*

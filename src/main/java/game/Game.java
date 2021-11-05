@@ -1,9 +1,7 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -26,6 +24,7 @@ import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
 import game.deck.Deck;
 import game.player.Player;
+import game.player.PlayersManager;
 import game.turns.TurnsLinkedList;
 import globals.Configs;
 import globals.Constants;
@@ -37,11 +36,9 @@ public class Game {
 	private Boolean isGameCreated; 	// set when the game is created
 	private Boolean isGameActive; 	// set when the game starts
 	private String password;		// generated when game created
-	private int numOfPlayers;		// number of players in the game (2-5)
-    private int numOfActivePlayers;	// number of current active playing
+	private PlayersManager playersManager;
 
     private Deck deck;				// Deck of cards
-    private List<Player> players;	// list of all players in the game
     private TurnsLinkedList turns;	// linkedlist implementing players turns
     
     private GameOver gameOverInfo;
@@ -61,8 +58,8 @@ public class Game {
 		configs = Configs.getInstance();
         isGameCreated = false;
         isGameActive = false;
-        
-        initPlayersMembers();
+        turns = new TurnsLinkedList();
+        playersManager = new PlayersManager();
         initCardsMembers();
     }
     
@@ -76,13 +73,6 @@ public class Game {
     public void registerCallback (GameManager notificationsCallback) {
     	gameNotificationsCallback = (IGameNotifications)notificationsCallback;
     	attackHandler.registerCallback((IAttackNotifications)notificationsCallback);
-    }
-    
-    private void initPlayersMembers() {
-    	numOfPlayers = 0;
-        numOfActivePlayers = 0;
-        players = Collections.synchronizedList(new ArrayList<Player>());
-        turns = new TurnsLinkedList();
     }
     
     private void initCardsMembers() {
@@ -112,14 +102,6 @@ public class Game {
     	return this.isGameActive;
     }
     
-    public int getNumOfPlayers() {
-		return numOfPlayers;
-	}
-
-	public int getNumOfActivePlayers() {
-		return numOfActivePlayers;
-	}
-
     public void setShowCoopBtn(Boolean showCoopBtn) {
 		this.showCoopBtn = showCoopBtn;
 	}
@@ -158,7 +140,7 @@ public class Game {
 	
 	public void createNewGame(int numPlayers) {
 		logger.info("A new game is created, with " + numPlayers + " players");
-    	this.numOfPlayers = numPlayers;
+    	playersManager.setNumOfPlayers(numPlayers);
     	deck = new Deck(numPlayers);
     	isGameCreated = true;
     }
@@ -187,19 +169,10 @@ public class Game {
     	deck.printCardsInDeck();
     }
     
-    private void setPlayersHands() {
-    	for (Player p : players) {
-    		for (int i=0; i< configs.getIntProperty(Constants.HAND_NUM_CARDS) ; i++) {
-    			getCardFromDeck(p.getId());
-    		}
-    	}
-    }
+    
     
     private void startCircularTurns() {
-    	turns.addPlayers(players);
-    	String id = turns.getCurrentPlayerId();
-    	
-    	logger.debug("Player " + getPlayer(id).getName() + " turn");
+    	turns.addPlayers(playersManager.getPlayers());
     }
     
     public GameInfo getPlayerInfo(String playerId) {
@@ -207,7 +180,7 @@ public class Game {
     	List<CardModel> cards = new ArrayList<>();
     	GameInfo info = new GameInfo();
     	
-    	for (Player p : players) {
+    	for (Player p : playersManager.getPlayers()) {
     		PlayerModel pm = new PlayerModel(p.getId(), p.getPlayerScore(), p.getName(), p.getImg(), p.isActive());
     		if (p.getId().equals(turns.getCurrentPlayerId())) {
 				pm.setMyTurn(true);
@@ -234,11 +207,9 @@ public class Game {
     
     public Map<String,GameInfo> getGameInfo() {
     	Map<String,GameInfo> playersIdToInfoMap = new HashMap<>();
-    	String id;
     	
-    	for (Player p : players) {
-    		id = p.getId();
-    		playersIdToInfoMap.put(id, getPlayerInfo(id));
+    	for (String playerId : playersManager.getPlayersIds()) {
+    		playersIdToInfoMap.put(playerId, getPlayerInfo(playerId));
     	}
     	
     	return playersIdToInfoMap;
@@ -293,22 +264,6 @@ public class Game {
     		logger.error("callback is null");
     	}
 	}
-   
-    public Player getPlayer(String id) {
-    	Player p = null;
-    	synchronized(players)
-        {
-    		Iterator<Player> it = players.iterator();
-  
-            while (it.hasNext()) {
-            	p = it.next();
-            	if ( p.getId().equals(id)) {
-            		return p;
-            	}
-            }
-        }
-    	return p;
-    }
 	
 	public void showCoopButtonIfNeeded() {
 		int invalidCardId = configs.getIntProperty(Constants.INVALID_CARD_ID);
@@ -317,36 +272,34 @@ public class Game {
 		}
 	}
 
+	/**
+	* This function tries to add a new player to the game:
+	* the players manager class is called to try add the player.
+	* if the player successfully added, a message is printed to logger
+	* and an event is sent to the game manager with the updated number
+	* of active players in game.
+	*
+	* @param playerId  	the string to identify the player as a client connected to the server.
+	* @param name  		the string represents the player name. 
+	* @param img  		the string represents the player image. 
+	* 
+	* @return  true|false	true if the player added, otherwise false.
+	*/
 	public Boolean addActivePlayer(String playerId, String name, String img) {
-    	Boolean isPlayerAdded = false;
-    	
-    	if (numOfActivePlayers < numOfPlayers) {
+    	if (playersManager.addActivePlayer(playerId, name, img)) {
     		logger.info("A new Player is added to the game");
-    		numOfActivePlayers++;
-    		isPlayerAdded = true;
-        	players.add(new Player(playerId, name, img));
-            notifyGameEventActivePlayers(numOfActivePlayers);
-    	}
-    	
-    	return isPlayerAdded;
-    }
-	
-	public Boolean allPlayersJoined() {
-    	if (numOfActivePlayers == numOfPlayers) {
-    		return true;
+            notifyGameEventActivePlayers(playersManager.getNumOfActivePlayers());
+            return true;
     	}
     	return false;
     }
+	
+	public int allPlayersJoined() {
+		return playersManager.allPlayersJoined() ? Constants.ALL_PLAYERS_JOINED : playersManager.getNumOfActivePlayers();
+    }
 
 	public void registerPlayerNotifications(IPlayerNotifications gameManager) {
-    	synchronized(players)
-        {
-            Iterator<Player> it = players.iterator();
-  
-            while (it.hasNext()) {
-            	it.next().registerCallback(gameManager);
-            }
-        }		
+    	playersManager.registerPlayerNotifications(gameManager);
 	}
 	
     private void putInUsedcardsPile(AbstractCard card) {
@@ -396,7 +349,7 @@ public class Game {
 	
 	public void handlePickedCards(String playerId, PickedCards cards) {
 		int card1, card2;
-		Player player = getPlayer(playerId);
+		Player player = playersManager.getPlayer(playerId);
 		
 		switch (cards.getNumOfPickedCards()) {
 			case Constants.NO_PICKED_CARDS:
@@ -417,7 +370,23 @@ public class Game {
 		}
 	}
     
-    public void getCardFromDeck(String playerId) {
+	private void setPlayersHands() {
+    	for (Player p : playersManager.getPlayers()) {
+    		for (int i=0; i< configs.getIntProperty(Constants.HAND_NUM_CARDS) ; i++) {
+    			getCardFromDeck(p);
+    		}
+    	}
+    }
+	
+	public void playerPickedCardFromDeck(String playerId) {
+		
+	}
+	
+	public void getCardFromDeck(String playerId) {
+		getCardFromDeck(playersManager.getPlayer(playerId));
+    }
+	
+    public void getCardFromDeck(Player player) {
     	AbstractCard card = deck.getCardFromDeck();
     	if (card == null) {
     		noMoreCards();
@@ -425,8 +394,7 @@ public class Game {
     		return;
     	}
     	logger.debug("get card from deck: " + card.getName());
-    	Player p = getPlayer(playerId);
-    	if (card.playCardFromDeck(p) == Constants.CARD_END_TURN) {
+    	if (card.playCardFromDeck(player) == Constants.CARD_END_TURN) {
     		logger.debug("got card " + card.getName() + "from deck is calling end turn");
     		endTurn();
     	}
@@ -447,7 +415,7 @@ public class Game {
     }
     
     public void doTreeAttack() {
-    	ArrayList<String> owners = getSpecialCardsOwners();
+    	List<String> owners = getSpecialCardsOwners();
     	attackHandler.nextAttackState();
     	if (owners.isEmpty()) {
     		attackHandler.finishAttackFail();
@@ -473,7 +441,7 @@ public class Game {
     }
     
     public void startAttackOnOtherPlayer(String victimId) {
-    	Player victim = getPlayer(victimId);
+    	Player victim = playersManager.getPlayer(victimId);
     	attackHandler.setVictim(victim);
     	attackHandler.executeState();
     }
@@ -520,50 +488,30 @@ public class Game {
     }
     
     
-    public ArrayList<String> getActivePlayers() {
-    	ArrayList<String> activePlayers = new ArrayList<>();
-    	for (Player p : players) {
-    		if (p.isActive()) {
-    			activePlayers.add(p.getId());
-    		}
-    	}
-    	return activePlayers;
+    public List<String> getActivePlayers() {
+    	return playersManager.getActivePlayersIds();
     }
     
-    public ArrayList<String> getActivePlayers(String playerId) {
-    	ArrayList<String> activePlayers = new ArrayList<>();
-    	for (Player p : players) {
-    		if (p.isActive() && !(p.getId().equals(playerId))) {
-    			activePlayers.add(p.getId());
-    		}
-    	}
-    	return activePlayers;
+    public List<String> getActivePlayers(String playerId) {
+    	return playersManager.getActivePlayersIds(playerId);
     }
     
-    public ArrayList<String> getActivePlayers(String playerAId, String playerBId) {
-    	ArrayList<String> activePlayers = new ArrayList<>();
-    	for (Player p : players) {
-    		if (p.isActive() && !(p.getId().equals(playerAId)) && !(p.getId().equals(playerBId))) {
-    			activePlayers.add(p.getId());
-    		}
-    	}
-    	return activePlayers;
+    public List<String> getActivePlayers(String playerAId, String playerBId) {
+    	return playersManager.getActivePlayersIds(playerAId, playerBId);
     }
     
-    public ArrayList<String> getSpecialCardsOwners() {
-    	ArrayList<String> toAttack = new ArrayList<>();
-    	if (specialCardBombID != configs.getIntProperty(Constants.INVALID_CARD_ID)) {
-    		String ownerId = ((AbstractOwnerableCard) deck.getCard(specialCardBombID)).getOwner();
-    		Player owner = getPlayer(ownerId);
-    		String name = owner.getName();
+    private void addSpecialCardOwner(int specialCardId, List<String> toAttack) {
+    	if (specialCardId != configs.getIntProperty(Constants.INVALID_CARD_ID)) {
+    		String ownerId = ((AbstractOwnerableCard) deck.getCard(specialCardId)).getOwner();
+    		String name = playersManager.getPlayerName(ownerId);
     		toAttack.add(name);
     	}
-    	if (specialCardSuperID != configs.getIntProperty(Constants.INVALID_CARD_ID)) {
-    		String ownerId = ((AbstractOwnerableCard) deck.getCard(specialCardSuperID)).getOwner();
-    		Player owner = getPlayer(ownerId);
-    		String name = owner.getName();
-    		toAttack.add(name);
-    	}
+    }
+    
+    public List<String> getSpecialCardsOwners() {
+    	List<String> toAttack = new ArrayList<>();
+    	addSpecialCardOwner(specialCardBombID, toAttack);
+    	addSpecialCardOwner(specialCardSuperID, toAttack);
     	return toAttack;
     }
     
@@ -644,10 +592,6 @@ public class Game {
     	if (isGameActive) {
     		turns.nextPlayerTurn();
         	String currentPlayer = turns.getCurrentPlayerId();
-        	
-        	Player p = getPlayer(currentPlayer);
-        	logger.debug("Player " + p.getName() + " Turn - " + currentPlayer);
-        	
         	notifyGameEventEndTurn(currentPlayer);
     	}
     }
@@ -670,8 +614,8 @@ public class Game {
     private void noMoreCards() {
     	int highScore = 0;
     	Player winner = null;
-    	for (Player p : players) {
-			if (p.isActive() && p.getPlayerScore() > highScore) {
+    	for (Player p : playersManager.getActivePlayers()) {
+			if (p.getPlayerScore() > highScore) {
 				highScore = p.getPlayerScore();
 				winner = p;
 			}
@@ -696,9 +640,9 @@ public class Game {
     	Boolean isGameOver = false;
     	logger.debug("player lose game - " + victim.getName());
 
-    	if (numOfActivePlayers == configs.getIntProperty(Constants.MIN_PLAYERS)) {
-    		for (Player p : players) {
-    			if (p.isActive() && !p.getId().equals(victim.getId())) {
+    	if (playersManager.getNumOfActivePlayers() == configs.getIntProperty(Constants.MIN_PLAYERS)) {
+    		for (Player p : playersManager.getActivePlayers()) {
+    			if (!p.getId().equals(victim.getId())) {
     				updateGameOverInfo(p, GameOver.WinType.WinType_last);
     				isGameOver = true;
     			}
@@ -707,7 +651,7 @@ public class Game {
     	else {
         	turns.setActive(victim.getId(), false);
         	victim.setActive(false);
-        	numOfActivePlayers--;
+        	playersManager.decreaseNumOfActivePlayers();
         	notifyPlayerLostGame(victim.getId());
     	}
     	

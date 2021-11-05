@@ -14,6 +14,7 @@ public class Constants {
 	public static final String HAND_NUM_CARDS 		= "numOfCardsInHand";
 	public static final String INVALID_CARD_ID 		= "invalidCardId";
 	public static final String MIN_PLAYERS 			= "minimumPlayers";
+	public static final int    ALL_PLAYERS_JOINED 	= 0;
 	
 	public static final int NO_PICKED_CARDS 		= 0;
 	public static final int SINGLE_PICKED_CARD 		= 1;

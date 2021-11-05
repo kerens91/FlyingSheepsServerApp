@@ -1,11 +1,12 @@
 package clientservershared;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AttackMsg {
 	private int msgType;
 	private String msgString;
-	private ArrayList<String> list;
+	private List<String> list;
 	private String mainImg;
 	private String secImg;
 	
@@ -29,12 +30,12 @@ public class AttackMsg {
 		this.msgString = msgString;
 	}
 
-	public ArrayList<String> getList() {
+	public List<String> getList() {
 		return list;
 	}
 
-	public void setList(ArrayList<String> list) {
-		this.list = list;
+	public void setList(List<String> list2) {
+		this.list = list2;
 	}
 
 	public String getMainImg() {
