@@ -1,7 +1,7 @@
 package card.interfaces;
 
 import card.AbstractCard;
-import game.player.Player;
+import game.gameplayers.Player;
 
 public interface IDefenseCard {
 	Boolean isStealDefenseCard();

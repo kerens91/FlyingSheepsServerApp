@@ -9,7 +9,7 @@ import attackstate.interfaces.IAttackStatable;
 import card.AbstractCard;
 import clientservershared.CardModel;
 import database.entity.StringEntity;
-import game.player.Player;
+import game.gameplayers.Player;
 import globals.Constants;
 
 

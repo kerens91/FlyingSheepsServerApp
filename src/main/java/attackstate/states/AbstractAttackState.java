@@ -7,7 +7,7 @@ import attackmsg.AttackMsgInfo;
 import attackstate.interfaces.IAttackStatable;
 import card.AbstractCard;
 import eventnotifications.IAttackNotifications;
-import game.player.Player;
+import game.gameplayers.Player;
 import globals.Configs;
 
 public abstract class AbstractAttackState {

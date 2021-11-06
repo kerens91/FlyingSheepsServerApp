@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,10 +25,13 @@ import eventnotifications.IAttackNotifications;
 import eventnotifications.ICardNotifications;
 import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
-import game.deck.Deck;
-import game.player.Player;
-import game.player.PlayersManager;
-import game.turns.TurnsLinkedList;
+import game.gameattacks.GameAttackHandler;
+import game.gamecards.CardsManager;
+import game.gamecards.deck.Deck;
+import game.gameeventnotifier.EventNotifier;
+import game.gameplayers.Player;
+import game.gameplayers.PlayersManager;
+import game.gameturns.TurnsLinkedList;
 import globals.Configs;
 import globals.Constants;
 
@@ -42,15 +48,11 @@ public class Game {
     private TurnsLinkedList turns;	// linkedlist implementing players turns
     private GameAttackHandler attackHandler;
     private EventNotifier gameNotifier;
+    private CardsManager cardsManager;
     
     private GameOver gameOverInfo;
     
     private Boolean showCoopBtn;
-	private int specialCardBombID;
-	private int specialCardSuperID;
-	private int specialCardHusbandID;
-	private int specialCardWifeID;
-	
 	
 	private static Game game_instance = null;
 	
@@ -58,10 +60,14 @@ public class Game {
 		configs = Configs.getInstance();
         isGameCreated = false;
         isGameActive = false;
+        showCoopBtn = false;
+        
         turns = new TurnsLinkedList();
         playersManager = new PlayersManager();
         gameNotifier = new EventNotifier();
-        initCardsMembers();
+        gameOverInfo = new GameOver();
+    	attackHandler = GameAttackHandler.getInstance();
+    	cardsManager = new CardsManager();
     }
     
 	public static Game getInstance() {
@@ -74,17 +80,6 @@ public class Game {
 	public void registerCallback (GameManager notificationsCallback) {
 		gameNotifier.registerCallback(notificationsCallback);
     	attackHandler.registerCallback((IAttackNotifications)notificationsCallback);
-    }
-    
-    private void initCardsMembers() {
-    	gameOverInfo = new GameOver();
-    	attackHandler = GameAttackHandler.getInstance();
-        
-        showCoopBtn = false;
-        specialCardBombID = configs.getIntProperty(Constants.INVALID_CARD_ID);
-        specialCardHusbandID = configs.getIntProperty(Constants.INVALID_CARD_ID);
-        specialCardSuperID = configs.getIntProperty(Constants.INVALID_CARD_ID);
-        specialCardWifeID = configs.getIntProperty(Constants.INVALID_CARD_ID);
     }
     
     public String getPassword() {
@@ -103,42 +98,6 @@ public class Game {
     	return this.isGameActive;
     }
     
-    public void setShowCoopBtn(Boolean showCoopBtn) {
-		this.showCoopBtn = showCoopBtn;
-	}
-
-    public int getSpecialCardBombID() {
-		return specialCardBombID;
-	}
-
-	public void setSpecialCardBombID(int specialCardBombID) {
-		this.specialCardBombID = specialCardBombID;
-	}
-
-	public int getSpecialCardSuperID() {
-		return specialCardSuperID;
-	}
-
-	public void setSpecialCardSuperID(int specialCardSuperID) {
-		this.specialCardSuperID = specialCardSuperID;
-	}
-
-	public int getSpecialCardHusbandID() {
-		return specialCardHusbandID;
-	}
-
-	public void setSpecialCardHusbandID(int specialCardHusbandID) {
-		this.specialCardHusbandID = specialCardHusbandID;
-	}
-
-	public int getSpecialCardWifeID() {
-		return specialCardWifeID;
-	}
-
-	public void setSpecialCardWifeID(int specialCardWifeID) {
-		this.specialCardWifeID = specialCardWifeID;
-	}
-	
 	public void createNewGame(int numPlayers) {
 		logger.info("A new game is created, with " + numPlayers + " players");
     	playersManager.setNumOfPlayers(numPlayers);
@@ -221,12 +180,9 @@ public class Game {
     	return c.getCardInfo();
     }
     
-    
-	
 	public void showCoopButtonIfNeeded() {
-		int invalidCardId = configs.getIntProperty(Constants.INVALID_CARD_ID);
-		if (specialCardHusbandID != invalidCardId && specialCardWifeID != invalidCardId) {
-			setShowCoopBtn(true);
+		if (cardsManager.isCooperationEnabled()) {
+			showCoopBtn = true;
 		}
 	}
 
@@ -394,27 +350,25 @@ public class Game {
 		}
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public void startAttackOnOtherPlayer(String victimId) {
     	Player victim = playersManager.getPlayer(victimId);
     	attackHandler.setVictim(victim);
     	attackHandler.executeState();
     }
     
-    private Boolean isCardSpecial(int cardId) {
-    	if (specialCardBombID == cardId) {
-    		return true;
-    	}
-    	if (specialCardHusbandID == cardId) {
-    		return true;
-    	}
-    	if (specialCardSuperID == cardId) {
-    		return true;
-    	}
-    	if (specialCardWifeID == cardId) {
-    		return true;
-    	}
-    	return false;
-    }
+
     
     public AbstractCard getPlayerRandomCard(Player victim) {
     	Random rand = new Random();
@@ -428,8 +382,9 @@ public class Game {
     public AbstractCard stealPlayerCard(Player victim, Player thief) {
     	AbstractCard c = getPlayerRandomCard(victim);
     	((AbstractPlayableCard)c).setCardUsed(victim);
-    	if (isCardSpecial(c.getId())) {
+    	if (cardsManager.isCardSpecial(c.getId())) {
     		((AbstractOwnerableCard) c).setOwners(thief.getId());
+    		showCoopButtonIfNeeded();
     	}
     	thief.addCardToPlayerHand(c);
     	return c;
@@ -454,19 +409,17 @@ public class Game {
     	return playersManager.getActivePlayersIds(playerAId, playerBId);
     }
     
-    private void addSpecialCardOwner(int specialCardId, List<String> toAttack) {
-    	if (specialCardId != configs.getIntProperty(Constants.INVALID_CARD_ID)) {
-    		String ownerId = ((AbstractOwnerableCard) deck.getCard(specialCardId)).getOwner();
-    		String name = playersManager.getPlayerName(ownerId);
-    		toAttack.add(name);
-    	}
-    }
+    public void specialCardInGame(int specialCardId) {
+		cardsManager.setSpecialCard(deck.getCard(specialCardId));
+		showCoopButtonIfNeeded();
+	}
     
     public List<String> getSpecialCardsOwners() {
-    	List<String> toAttack = new ArrayList<>();
-    	addSpecialCardOwner(specialCardBombID, toAttack);
-    	addSpecialCardOwner(specialCardSuperID, toAttack);
-    	return toAttack;
+    	Set<String> ownersIds = cardsManager.getSpecialCardsOwners();
+    	Function<String, String> mapIdToName = ownerId -> playersManager.getPlayerName(ownerId);
+		return ownersIds.stream()
+    			.map(mapIdToName)
+    			.collect(Collectors.toList());
     }
     
     public void blockNextPlayer() {

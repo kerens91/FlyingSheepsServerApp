@@ -3,7 +3,7 @@ package card.implementation.defense;
 import card.AbstractCard;
 import card.interfaces.IDefenseCard;
 import card.types.AbstractPlayableCard;
-import game.player.Player;
+import game.gameplayers.Player;
 
 
 public class DogCard extends AbstractPlayableCard implements IDefenseCard {

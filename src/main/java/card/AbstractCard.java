@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import clientservershared.CardModel;
 import eventnotifications.ICardNotifications;
-import game.player.Player;
+import game.gameplayers.Player;
 import globals.Configs;
 
 public abstract class AbstractCard {

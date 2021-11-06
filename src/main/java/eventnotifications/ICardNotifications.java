@@ -1,13 +1,10 @@
 package eventnotifications;
 
 import card.AbstractCard;
-import game.player.Player;
+import game.gameplayers.Player;
 
 public interface ICardNotifications {
-	void onGotFromDeckBomb(int cardId);
-	void onGotFromDeckSuper(int cardId);
-	void onGotFromDeckHusband(int cardId);
-	void onGotFromDeckWife(int cardId);
+	void onGotFromDeckSpecial(int cardId);
 	
 	void attackCardPicked(AbstractCard card, Player player);
 	void defenseCardPicked(AbstractCard card, Player player);

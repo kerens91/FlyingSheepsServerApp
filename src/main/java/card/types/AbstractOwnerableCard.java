@@ -1,7 +1,7 @@
 package card.types;
 
 import card.interfaces.ICoupledCard;
-import game.player.Player;
+import game.gameplayers.Player;
 
 public abstract class AbstractOwnerableCard extends AbstractPlayableCard implements ICoupledCard {
 	private String owner;
@@ -10,6 +10,12 @@ public abstract class AbstractOwnerableCard extends AbstractPlayableCard impleme
 		super(typeId, gameId, name, textColor, img, frame, back);
 	}
 	
+	public Boolean playCardFromDeck(Player player) {
+		setOwners(player.getId());
+		cardNotifications.onGotFromDeckSpecial(getId());
+		return super.playCardFromDeck(player);
+	}
+
 	@Override
 	public void playerPickedCard(Player player) {
 		setCardUsed(player);
@@ -23,16 +29,18 @@ public abstract class AbstractOwnerableCard extends AbstractPlayableCard impleme
 		}	
 	}
 	
-	public Boolean playCardFromDeck(Player player) {
-		setOwners(player.getId());
-		return super.playCardFromDeck(player);
-	}
-	
 	public void setOwners(String owner) {
 		this.owner = owner;
 	}
 
 	public String getOwner() {
 		return owner;
+	}
+	
+	public abstract cardFeatureType getSpecialFeatureType();
+	
+	public enum cardFeatureType {
+		FEATURE_TYPE_COOP,
+		FEATURE_TYPE_WIN
 	}
 }

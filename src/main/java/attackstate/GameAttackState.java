@@ -10,7 +10,7 @@ import attackstate.states.PreAttack;
 import attackstate.states.SuccessAttack;
 import card.AbstractCard;
 import eventnotifications.IAttackNotifications;
-import game.player.Player;
+import game.gameplayers.Player;
 
 public class GameAttackState {
 	public GameAttackState() {

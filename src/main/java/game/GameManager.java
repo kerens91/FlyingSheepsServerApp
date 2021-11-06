@@ -18,7 +18,8 @@ import eventnotifications.ICardNotifications;
 import eventnotifications.IClientRequestNotifications;
 import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
-import game.player.Player;
+import game.gameattacks.GameAttackHandler;
+import game.gameplayers.Player;
 import globals.Constants;
 import serverConnections.SocketHandler;
 
@@ -249,27 +250,9 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	}
 
 	@Override
-	public void onGotFromDeckBomb(int id) {
-		game.setSpecialCardBombID(id);
+	public void onGotFromDeckSpecial(int id) {
+		game.specialCardInGame(id);
 	}
-
-	@Override
-	public void onGotFromDeckSuper(int id) {
-		game.setSpecialCardSuperID(id);
-	}
-
-	@Override
-	public void onGotFromDeckHusband(int id) {
-		game.setSpecialCardHusbandID(id);
-		game.showCoopButtonIfNeeded();
-	}
-
-	@Override
-	public void onGotFromDeckWife(int id) {
-		game.setSpecialCardWifeID(id);
-		game.showCoopButtonIfNeeded();
-	}
-
 	
 	@Override
 	public void onCurrentPlayerChanged(String currentPlayer) {

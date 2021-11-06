@@ -1,6 +1,6 @@
 package clientservershared;
 
-import game.player.Player;
+import game.gameplayers.Player;
 
 public class GameOver {
 	private String winnerId;

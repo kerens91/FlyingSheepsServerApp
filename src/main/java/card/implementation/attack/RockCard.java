@@ -4,7 +4,7 @@ import java.util.List;
 
 import card.types.AbstractAttackCard;
 import database.entity.StringEntity;
-import game.player.Player;
+import game.gameplayers.Player;
 
 
 

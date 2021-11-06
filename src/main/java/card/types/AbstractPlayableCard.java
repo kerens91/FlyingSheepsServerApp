@@ -2,7 +2,7 @@ package card.types;
 
 import card.AbstractCard;
 import clientservershared.CardModel;
-import game.player.Player;
+import game.gameplayers.Player;
 import globals.Constants;
 
 public abstract class AbstractPlayableCard extends AbstractCard {

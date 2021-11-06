@@ -1,7 +1,7 @@
 package card.types;
 
 import clientservershared.CardModel;
-import game.player.Player;
+import game.gameplayers.Player;
 
 public abstract class AbstractValueableCard extends AbstractPlayableCard {
 	private int numOfPoints;

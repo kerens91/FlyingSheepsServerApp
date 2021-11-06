@@ -1,4 +1,4 @@
-package game.player;
+package game.gameplayers;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -7,7 +7,7 @@ import card.AbstractCard;
 import card.interfaces.IDefenseCard;
 import card.types.AbstractAttackCard;
 import database.entity.StringEntity;
-import game.player.Player;
+import game.gameplayers.Player;
 
 
 public class StealCard extends AbstractAttackCard implements IAttackDefensable {

@@ -1,4 +1,4 @@
-package game;
+package game.gameattacks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import attackstate.GameAttackState;
 import card.AbstractCard;
 import clientservershared.AttackMsg;
 import eventnotifications.IAttackNotifications;
-import game.player.Player;
+import game.gameplayers.Player;
 import globals.Constants;
 
 public class GameAttackHandler {

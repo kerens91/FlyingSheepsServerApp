@@ -6,7 +6,7 @@ import card.CardFactory;
 import card.interfaces.ICoupledCard;
 import card.types.AbstractPlayableCard;
 import card.types.AbstractValueableCard;
-import game.player.Player;
+import game.gameplayers.Player;
 
 
 public class RegularCard extends AbstractValueableCard implements ICoupledCard {

@@ -7,7 +7,7 @@ import attackmsg.AttackMsgInfo;
 import attackstate.interfaces.IAttackStatable;
 import card.AbstractCard;
 import database.entity.StringEntity;
-import game.player.Player;
+import game.gameplayers.Player;
 import globals.Constants;
 
 

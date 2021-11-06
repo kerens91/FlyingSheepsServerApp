@@ -1,4 +1,4 @@
-package game;
+package game.gameeventnotifier;
 
 import java.util.Optional;
 
@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import clientservershared.CardModel;
 import clientservershared.GameOver;
 import eventnotifications.IGameNotifications;
+import game.GameManager;
 
 public class EventNotifier {
 	private static final Logger logger = LogManager.getLogger(EventNotifier.class);

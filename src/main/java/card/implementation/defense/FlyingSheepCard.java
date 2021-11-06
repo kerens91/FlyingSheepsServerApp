@@ -3,7 +3,7 @@ package card.implementation.defense;
 import card.AbstractCard;
 import card.interfaces.IDefenseCard;
 import card.types.AbstractValueableCard;
-import game.player.Player;
+import game.gameplayers.Player;
 
 public class FlyingSheepCard extends AbstractValueableCard implements IDefenseCard {
 	public FlyingSheepCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int value, String points) {

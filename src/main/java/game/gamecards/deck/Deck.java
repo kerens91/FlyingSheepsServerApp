@@ -1,4 +1,4 @@
-package game.deck;
+package game.gamecards.deck;
 
 import java.util.ArrayList;
 import java.util.HashMap;
