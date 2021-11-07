@@ -22,7 +22,7 @@ public class StealCard extends AbstractAttackCard implements IAttackDefensable {
 
 	@Override
 	public void doAttack() {
-		cardNotifications.notifyStealAttack();
+		cardNotifications.notifyAttackOnPlayer();
 	}
 
 	@Override

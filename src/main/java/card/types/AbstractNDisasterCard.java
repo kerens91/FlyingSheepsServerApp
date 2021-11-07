@@ -38,7 +38,7 @@ private HashMap<Integer,HashMap<Integer,AttackMsgInfo>> cardStrings;
 	
 	@Override
 	public void doAttack() {
-		cardNotifications.notifyNatureDisasterAttack();
+		cardNotifications.notifyAttackOnPlayer();
 	}
 	
 	@Override

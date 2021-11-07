@@ -1,19 +1,17 @@
 package game;
 
+import static globals.Constants.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import attackstate.GameAttackState;
 import card.AbstractCard;
-import card.types.AbstractOwnerableCard;
 import card.types.AbstractPlayableCard;
 import clientservershared.CardModel;
 import clientservershared.GameInfo;
@@ -23,9 +21,10 @@ import clientservershared.PickedCards;
 import clientservershared.PlayerModel;
 import eventnotifications.IAttackNotifications;
 import eventnotifications.ICardNotifications;
-import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
-import game.gameattacks.GameAttackHandler;
+import game.gameattacks.AttackHandler;
+import game.gameattacks.AttackMsgGenerator;
+import game.gameattacks.AttacksGenerator;
 import game.gamecards.CardsManager;
 import game.gamecards.deck.Deck;
 import game.gameeventnotifier.EventNotifier;
@@ -33,7 +32,6 @@ import game.gameplayers.Player;
 import game.gameplayers.PlayersManager;
 import game.gameturns.TurnsLinkedList;
 import globals.Configs;
-import globals.Constants;
 
 
 public class Game {
@@ -46,9 +44,13 @@ public class Game {
 	private PlayersManager playersManager;
     private Deck deck;				// Deck of cards
     private TurnsLinkedList turns;	// linkedlist implementing players turns
-    private GameAttackHandler attackHandler;
+    private GameAttackState attackState;
+    private AttackHandler attackHandler;
+    private AttackMsgGenerator attackMsgGenerator;
+    private AttacksGenerator attackGenerator;
     private EventNotifier gameNotifier;
     private CardsManager cardsManager;
+    
     
     private GameOver gameOverInfo;
     
@@ -66,8 +68,11 @@ public class Game {
         playersManager = new PlayersManager();
         gameNotifier = new EventNotifier();
         gameOverInfo = new GameOver();
-    	attackHandler = GameAttackHandler.getInstance();
-    	cardsManager = new CardsManager();
+        cardsManager = new CardsManager();
+        attackState = new GameAttackState();
+        attackMsgGenerator = new AttackMsgGenerator(attackState);
+    	attackHandler = new AttackHandler(attackState, playersManager, attackMsgGenerator, cardsManager, turns);
+    	attackGenerator = new AttacksGenerator(attackHandler);
     }
     
 	public static Game getInstance() {
@@ -98,6 +103,18 @@ public class Game {
     	return this.isGameActive;
     }
     
+	public AttackHandler getAttackHandler() {
+		return attackHandler;
+	}
+
+	public AttacksGenerator getAttackGenerator() {
+		return attackGenerator;
+	}
+	
+	public Player getPlayer(String playerId) {
+		return playersManager.getPlayer(playerId);
+	}
+
 	public void createNewGame(int numPlayers) {
 		logger.info("A new game is created, with " + numPlayers + " players");
     	playersManager.setNumOfPlayers(numPlayers);
@@ -209,7 +226,7 @@ public class Game {
     }
 	
 	public int allPlayersJoined() {
-		return playersManager.allPlayersJoined() ? Constants.ALL_PLAYERS_JOINED : playersManager.getNumOfActivePlayers();
+		return playersManager.allPlayersJoined() ? ALL_PLAYERS_JOINED : playersManager.getNumOfActivePlayers();
     }
 
 	public void registerPlayerNotifications(IPlayerNotifications gameManager) {
@@ -266,14 +283,14 @@ public class Game {
 		Player player = playersManager.getPlayer(playerId);
 		
 		switch (cards.getNumOfPickedCards()) {
-			case Constants.NO_PICKED_CARDS:
+			case NO_PICKED_CARDS:
 				logger.error("No cards picked");
 				break;
-			case Constants.SINGLE_PICKED_CARD:
+			case SINGLE_PICKED_CARD:
 				card1 = cards.getCard1();
 				handleSingleCardPicked(player, card1);
 				break;
-			case Constants.COUPLE_PICKED_CARDS:
+			case COUPLE_PICKED_CARDS:
 				card1 = cards.getCard1();
 				card2 = cards.getCard2();
 				handleCoupleCardsPicked(player, card1, card2);
@@ -286,7 +303,7 @@ public class Game {
     
 	private void setPlayersHands() {
     	for (Player p : playersManager.getPlayers()) {
-    		for (int i=0; i< configs.getIntProperty(Constants.HAND_NUM_CARDS) ; i++) {
+    		for (int i=0; i< configs.getIntProperty(HAND_NUM_CARDS) ; i++) {
     			getCardFromDeck(p);
     		}
     	}
@@ -304,194 +321,57 @@ public class Game {
     		return;
     	}
     	logger.debug("get card from deck: " + card.getName());
-    	if (card.playCardFromDeck(player) == Constants.CARD_END_TURN) {
+    	if (card.playCardFromDeck(player) == CARD_END_TURN) {
     		logger.debug("got card " + card.getName() + "from deck is calling end turn");
     		endTurn();
     	}
     }
     
-    
-    
-    public void doRockAttack() {
-    	Player victim = attackHandler.getPlayerVictim();
-    	AbstractCard removedCard = removePlayerCard(victim);
-    	attackHandler.setHelperCard(removedCard);
-    	attackHandler.nextAttackState();
-    }
-    
-    public void doRiverAttack() {
-    	blockNextPlayer();
-    	attackHandler.nextAttackState();
-    }
-    
-    public void doTreeAttack() {
-    	List<String> owners = getSpecialCardsOwners();
-    	attackHandler.nextAttackState();
-    	if (owners.isEmpty()) {
-    		attackHandler.finishAttackFail();
-    	}
-    	else {
-    		attackHandler.finishAttackSuc();
-    	}
-    }
-    
-    public void doStealAttack() {
-    	Player victim = attackHandler.getPlayerVictim();
-    	Player thief = attackHandler.getPlayerAttacker();
-    	AbstractCard stolenCard = stealPlayerCard(victim, thief);
-    	attackHandler.setHelperCard(stolenCard);
-    }
-    
-    public void doNatureDisasterAttack() {
-    	Player victim = attackHandler.getPlayerVictim();
-    	Boolean isGameOver = playerLoseGame(victim);
-		if (isGameOver) {
-			gameOver();
-		}
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public void startAttackOnOtherPlayer(String victimId) {
-    	Player victim = playersManager.getPlayer(victimId);
-    	attackHandler.setVictim(victim);
-    	attackHandler.executeState();
-    }
-    
-
-    
-    public AbstractCard getPlayerRandomCard(Player victim) {
-    	Random rand = new Random();
-    	int max = victim.getNumOfCards()-1;
-    	int min = 0;
-		int randomCardIndex = min + rand.nextInt(max-min);
-		return victim.getCardInIndex(randomCardIndex);
-    }
-    
-    
-    public AbstractCard stealPlayerCard(Player victim, Player thief) {
-    	AbstractCard c = getPlayerRandomCard(victim);
-    	((AbstractPlayableCard)c).setCardUsed(victim);
-    	if (cardsManager.isCardSpecial(c.getId())) {
-    		((AbstractOwnerableCard) c).setOwners(thief.getId());
-    		showCoopButtonIfNeeded();
-    	}
-    	thief.addCardToPlayerHand(c);
-    	return c;
-    }
-    
-    public AbstractCard removePlayerCard(Player victim) {
-    	AbstractCard c = getPlayerRandomCard(victim);
-    	((AbstractPlayableCard)c).setCardUsed(victim);
-    	return c;
-    }
-    
-    
-    public List<String> getActivePlayers() {
-    	return playersManager.getActivePlayersIds();
-    }
-    
-    public List<String> getActivePlayers(String playerId) {
-    	return playersManager.getActivePlayersIds(playerId);
-    }
-    
-    public List<String> getActivePlayers(String playerAId, String playerBId) {
-    	return playersManager.getActivePlayersIds(playerAId, playerBId);
-    }
-    
-    public void specialCardInGame(int specialCardId) {
+    public void setSpecialCard(int specialCardId) {
 		cardsManager.setSpecialCard(deck.getCard(specialCardId));
 		showCoopButtonIfNeeded();
 	}
     
-    public List<String> getSpecialCardsOwners() {
-    	Set<String> ownersIds = cardsManager.getSpecialCardsOwners();
-    	Function<String, String> mapIdToName = ownerId -> playersManager.getPlayerName(ownerId);
-		return ownersIds.stream()
-    			.map(mapIdToName)
-    			.collect(Collectors.toList());
-    }
     
-    public void blockNextPlayer() {
-    	turns.setBlocked(true);
-    }
    
 	public void defenseCardPicked(AbstractCard card, Player player) {
 		if (attackHandler.isAttackActive() && attackHandler.isPlayerVictim(player)) {
-			playerDefending(card, player, false);
+			attackHandler.playerDefending(card, player, false);
 		}
 	}
 	
 	public void defenseCardFlyingSheepPicked(AbstractCard card, Player player) {
 		if (attackHandler.isAttackActive() && attackHandler.isPlayerVictim(player)) {
-			playerDefending(card, player, true);
+			attackHandler.playerDefending(card, player, true);
 		}
 	}
 	
 	public void attackCardPicked(AbstractCard card, Player player) {
 		if (attackHandler.isAttackActive()) {
 			if (attackHandler.isPlayerVictim(player)) {
-				victimLoseAttack();
+				attackHandler.victimLoseAttack();
 			}
 		}
 		else {
-			startAttack(card, player);
+			attackGenerator.startAttack(card, player);
 		}
 	}
 	
-	private void playerDefending(AbstractCard defenseCard, Player victim, Boolean isFlyingSheep) {
-		attackHandler.setHelperCard(defenseCard);
-		if (attackHandler.isVictimDefended()) {
-			if (isFlyingSheep) {
-				victim.removeAllExceptFlyingSheepCards(defenseCard.getId());
-			}
-			attackHandler.finishAttackFail();
-		}
-		else {
-			victimLoseAttack();
-		}
-	}
 	
 	public void noCardPicked() {
-		victimLoseAttack();
+		attackHandler.victimLoseAttack();
 	}
 	
-	private void victimLoseAttack() {
-		attackHandler.finishAttackSuc();
-	}
-	
-	private void startAttack(AbstractCard card, Player player) {
-		logger.debug("Starting attack " + card.getName() + ", attacker is " + player.getName());
-		attackHandler.setAttackCard(card);
-		attackHandler.setAttacker(player);
-		attackHandler.executeState();
-	}
-	
-	public void startNatureDisasterAttack(AbstractCard card, Player player) {
-		attackHandler.setAttackCard(card);
-		attackHandler.setVictim(player);
-		attackHandler.executeState();
-	}
 
 	public void SpecialCardPicked(AbstractCard card, Player player) {
 		if (attackHandler.isAttackActive() && attackHandler.isPlayerVictim(player)) {
-			victimLoseAttack();
+			attackHandler.victimLoseAttack();
 		}
 	}
 	
 	public void RegularCardPicked(AbstractCard card, Player player) {
 		if (attackHandler.isAttackActive() && attackHandler.isPlayerVictim(player)) {
-			victimLoseAttack();
+			attackHandler.victimLoseAttack();
 		}
 	}
 	
@@ -543,15 +423,14 @@ public class Game {
      * in case only one player is left, set player as winner
      * return boolean to indicate if game over (single player left)
      */
-    public Boolean playerLoseGame(Player victim) {
-    	Boolean isGameOver = false;
+    public void playerLoseGame(Player victim) {
     	logger.debug("player lose game - " + victim.getName());
 
-    	if (playersManager.getNumOfActivePlayers() == configs.getIntProperty(Constants.MIN_PLAYERS)) {
+    	if (playersManager.getNumOfActivePlayers() == configs.getIntProperty(MIN_PLAYERS)) {
     		for (Player p : playersManager.getActivePlayers()) {
     			if (!p.getId().equals(victim.getId())) {
     				updateGameOverInfo(p, GameOver.WinType.WinType_last);
-    				isGameOver = true;
+    				gameOver();
     			}
     		}
     	}
@@ -561,17 +440,8 @@ public class Game {
         	playersManager.decreaseNumOfActivePlayers();
         	gameNotifier.lostGame(victim.getId());
     	}
-    	
-    	return isGameOver;
+
     }
-
-
-	public void nextAttackState() {
-		attackHandler.nextAttackState();
-	}
-
-	public void finishAttackSuc() {
-		attackHandler.finishAttackSuc();
-	}
-
+	
+	
 }

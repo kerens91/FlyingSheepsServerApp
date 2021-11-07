@@ -1,15 +1,17 @@
 package game;
 
-import static globals.Constants.*;
+import static globals.Constants.ALL_PLAYERS_JOINED;
+import static globals.Constants.DEST_ALL;
+import static globals.Constants.DEST_ATTACKER;
+import static globals.Constants.DEST_VICTIM;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import card.AbstractCard;
-import clientservershared.AttackMsg;
 import clientservershared.CardModel;
 import clientservershared.GameInfo;
 import clientservershared.GameOver;
@@ -19,7 +21,10 @@ import eventnotifications.ICardNotifications;
 import eventnotifications.IClientRequestNotifications;
 import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
-import game.gameattacks.GameAttackHandler;
+import game.gameattacks.AttackHandler;
+import game.gameattacks.AttackMsgGenerator;
+import game.gameattacks.AttackMsgWrapper;
+import game.gameattacks.AttacksGenerator;
 import game.gameplayers.Player;
 import serverConnections.SocketHandler;
 
@@ -78,15 +83,18 @@ import serverConnections.SocketHandler;
 public class GameManager implements IGameNotifications, ICardNotifications, IPlayerNotifications, IClientRequestNotifications, IAttackNotifications {
 	private static final Logger logger = LogManager.getLogger(GameManager.class);
 	private Game game;						// represents the current running game
+	private AttackHandler attackHandler;
+	private AttacksGenerator attackGenerator;
 	private SocketHandler socketsHandler;	// manages clients requsts and responses
-	private GameAttackHandler attackHandler;
 	
 	public GameManager() {
 		logger.info("GAME MANAGER started...");
 		
 		game = Game.getInstance();
 		game.registerCallback(this);
-		attackHandler = GameAttackHandler.getInstance();
+		
+		attackHandler = game.getAttackHandler();
+		attackGenerator = game.getAttackGenerator();
 		
 		socketsHandler = new SocketHandler();
 		socketsHandler.registerCallback(this);
@@ -319,7 +327,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	*/
 	@Override
 	public void onGotFromDeckSpecial(int id) {
-		game.specialCardInGame(id);
+		game.setSpecialCard(id);
 	}
 	
 	/**
@@ -388,191 +396,98 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	public void onPlayerLostGame(String playerId) {
 		socketsHandler.sendClientLostGame(playerId);
 	}
-
-
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	private void notifyAttackOnVictim() {	
-		String victim = attackHandler.getVictim();
+	private void sendAttackMsg(Map<Integer, AttackMsgWrapper> destToMsgMap) {	
+		Optional.ofNullable(destToMsgMap.get(DEST_VICTIM))
+			.ifPresent(attackMsgWrapper -> {
+				socketsHandler.sendClientAttackMsg(attackMsgWrapper.getDestinations().get(0), attackMsgWrapper.getMsg());
+			});
 		
-		socketsHandler.sendClientAttackMsg(
-				victim, 
-				attackHandler.notifyAttackGetVictimMsg());
+		Optional.ofNullable(destToMsgMap.get(DEST_ATTACKER))
+			.ifPresent(attackMsgWrapper -> {
+				socketsHandler.sendClientAttackMsg(attackMsgWrapper.getDestinations().get(0), attackMsgWrapper.getMsg());
+		});
 		
-		List<String> activePlayers = game.getActivePlayers(victim);
-		socketsHandler.sendMultipleClientsAttackMsg(
-				activePlayers, 
-				attackHandler.notifyAttackGetAllPlayersMsg());
-		
-		game.nextAttackState();
+		Optional.ofNullable(destToMsgMap.get(DEST_ALL))
+			.ifPresent(attackMsgWrapper -> {
+				socketsHandler.sendMultipleClientsAttackMsg(attackMsgWrapper.getDestinations(), attackMsgWrapper.getMsg());
+		});
 	}
 	
+	@Override
+	public void notifyAttackOnPlayer() {
+		sendAttackMsg(attackHandler.notifyDefensableAttack());
+	}
 
 	@Override
 	public void askVictimForAttack() {
-		String attackerId = attackHandler.getAttacker();
-		AttackMsg msg = attackHandler.preAttackGetMsg(game.getActivePlayers(attackerId));
-		game.nextAttackState();
-		socketsHandler.sendClientAttackMsg(attackerId, msg);
+		sendAttackMsg(attackHandler.askVictimForAttack());
 	}
 	
 	@Override
 	public void doRockAttack() {
-		game.doRockAttack();
-		game.finishAttackSuc();
+		attackGenerator.doRockAttack();
+		attackHandler.finishAttackSuc();
 	}
 	
 	@Override
 	public void rockAttackSucceeded() {
-		AttackMsg msg;
-
-		String victim = attackHandler.getVictim();
-		msg = attackHandler.rockAttSucGetVictimMsg();
-		socketsHandler.sendClientAttackMsg(victim, msg);
-		
-		List<String> activePlayers = game.getActivePlayers(victim);
-		msg = attackHandler.rockAttSucGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
-		
-		game.nextAttackState();
-	}
-	
-	
-	@Override
-	public void notifyStealAttack() {
-		notifyAttackOnVictim();
+		sendAttackMsg(attackHandler.rockAttackSucceeded());
 	}
 	
 	@Override
 	public void stealAttackSucceeded() {
-		AttackMsg msg;
-		game.doStealAttack();
-		
-		String victim = attackHandler.getVictim();
-		msg = attackHandler.stealAttSucGetVictimMsg();
-		socketsHandler.sendClientAttackMsg(victim, msg);
-		
-		String attacker = attackHandler.getAttacker();
-		msg = attackHandler.stealAttSucGetAttMsg();
-		socketsHandler.sendClientAttackMsg(attacker, msg);
-				
-		List<String> activePlayers = game.getActivePlayers(victim, attacker);
-		msg = attackHandler.stealAttSucGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
-		
-		game.nextAttackState();
+		if (attackGenerator.doStealAttack()) {
+			// true - special card
+			game.showCoopButtonIfNeeded();
+		}
+		sendAttackMsg(attackHandler.stealAttackSucceeded());
 	}
 	
 	@Override
 	public void stealAttackFailed() {
-
-		socketsHandler.sendMultipleClientsAttackMsg(
-				game.getActivePlayers(), 
-				attackHandler.stealAttFailedGetAllPlayersMsg());
-				
-		game.nextAttackState();
+		sendAttackMsg(attackHandler.stealAttackFailed());
 	}
 	
 	@Override
 	public void doRiverAttack() {
-		game.doRiverAttack();
-		game.finishAttackSuc();
+		attackGenerator.doRiverAttack();
+		attackHandler.finishAttackSuc();
 	}
 	
 	@Override
 	public void riverAttackSucceeded() {
-		AttackMsg msg;
-
-		String attacker = attackHandler.getAttacker();
-		List<String> activePlayers = game.getActivePlayers(attacker);
-		msg = attackHandler.riverAttSucGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
-		
-		game.nextAttackState();
+		sendAttackMsg(attackHandler.riverAttackSucceeded());
 	}
 	
 	@Override
 	public void doTreeAttack() {
-		game.doTreeAttack();
+		attackGenerator.doTreeAttack();
 	}
 	
 	@Override
 	public void treeAttackSucceeded() {
-		AttackMsg msg;
-
-		String attacker = attackHandler.getAttacker();
-		msg = attackHandler.treeAttSucGetAttMsg(game.getSpecialCardsOwners());
-		socketsHandler.sendClientAttackMsg(attacker, msg);
-						
-		List<String> activePlayers = game.getActivePlayers(attacker);
-		msg = attackHandler.treeAttGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
-		
-		game.nextAttackState();
+		sendAttackMsg(attackHandler.treeAttackSucceeded());
 	}
 	
 	@Override
 	public void treeAttackFailed() {
-		AttackMsg msg;
+		sendAttackMsg(attackHandler.treeAttackFailed());
+	}
+	
 
-		String attacker = attackHandler.getAttacker();
-		msg = attackHandler.treeAttFailGetAttMsg();
-		socketsHandler.sendClientAttackMsg(attacker, msg);
-						
-		List<String> activePlayers = game.getActivePlayers(attacker);
-		msg = attackHandler.treeAttGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(activePlayers, msg);
-		
-		game.nextAttackState();
-	}
-	
-	@Override
-	public void notifyNatureDisasterAttack() {
-		notifyAttackOnVictim();
-	}
-	
 	
 	@Override
 	public void natureDisasterAttackSucceeded() {
-		game.doNatureDisasterAttack();
-		
-		socketsHandler.sendMultipleClientsAttackMsg(
-				game.getActivePlayers(), 
-				attackHandler.natureAttSucGetAllPlayersMsg());
-		
-		game.nextAttackState();
+		Player victim = attackGenerator.doNatureDisasterAttack();
+		sendAttackMsg(attackHandler.natureDisasterAttackSucceeded());
+		game.playerLoseGame(victim);
 	}
 	
 	@Override
 	public void natureDisasterAttackFailed() {
-		AttackMsg msg;
-
-		msg = attackHandler.natureAttFailGetAllPlayersMsg();
-		socketsHandler.sendMultipleClientsAttackMsg(game.getActivePlayers(), msg);
-		
-		game.nextAttackState();
+		sendAttackMsg(attackHandler.natureDisasterAttackFailed());
 	}
-	
-
-
-	
-
-	
-	
-
 	
 	@Override
 	public void onPlayerPickedCards(String clientId, PickedCards cards) {
@@ -581,7 +496,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void onAttackPlayerReq(String victimId) {
-		game.startAttackOnOtherPlayer(victimId);
+		attackGenerator.startAttackOnOtherPlayer(game.getPlayer(victimId));
 	}
 	
 	@Override
@@ -611,7 +526,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 
 	@Override
 	public void startNatureDisasterAttack(AbstractCard card, Player player) {
-		game.startNatureDisasterAttack(card, player);
+		attackGenerator.startNatureDisasterAttack(card, player);
 	}
 
 	@Override
@@ -623,7 +538,5 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	public void specialCoupleShowCoopBtn() {
 		// TODO: implement coop button
 	}
-	public void doTest() {
-		System.out.println();
-	}
+
 }

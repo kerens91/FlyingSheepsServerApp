@@ -11,10 +11,11 @@ public interface ICardNotifications {
 	void defenseCardPickedFlyingSheep(AbstractCard card, Player player);
 	void startNatureDisasterAttack(AbstractCard card, Player player);
 	
+	void notifyAttackOnPlayer();
+	
 	void doRockAttack();
 	void rockAttackSucceeded();
 	
-	void notifyStealAttack();
 	void stealAttackSucceeded();
 	void stealAttackFailed();
 	
@@ -25,7 +26,6 @@ public interface ICardNotifications {
 	void treeAttackSucceeded();
 	void treeAttackFailed();
 	
-	void notifyNatureDisasterAttack();
 	void natureDisasterAttackSucceeded();
 	void natureDisasterAttackFailed();
 	

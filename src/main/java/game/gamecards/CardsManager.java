@@ -1,7 +1,6 @@
 package game.gamecards;
 
-import static card.types.AbstractOwnerableCard.cardFeatureType.FEATURE_TYPE_COOP;
-import static card.types.AbstractOwnerableCard.cardFeatureType.FEATURE_TYPE_WIN;
+import static card.types.AbstractOwnerableCard.cardFeatureType.*;
 
 import java.util.ArrayList;
 import java.util.List;
