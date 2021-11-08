@@ -1,5 +1,7 @@
 package clientservershared;
 
+import game.gameplayers.Player;
+
 public class PlayerModel {
 	private String playerId;
     private String name;
@@ -8,6 +10,7 @@ public class PlayerModel {
     private Boolean isActive;
     private Boolean myTurn;
 
+    // remove
     public PlayerModel(String playerId, int score, String name, String img, Boolean isActive ) {
         this.playerId = playerId;
         this.name = name;
@@ -15,6 +18,15 @@ public class PlayerModel {
         this.score = score;
         this.isActive = isActive;
         this.myTurn = false;
+    }
+    
+    public PlayerModel(Player player, String currentPlayer) {
+        playerId = player.getId();
+        name = player.getName();
+        img = player.getImg();
+        score = player.getPlayerScore();
+        isActive = player.isActive();
+        myTurn = currentPlayer == playerId ? true : false;
     }
 
     public String getPlayerId() {

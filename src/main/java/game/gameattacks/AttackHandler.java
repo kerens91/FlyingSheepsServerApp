@@ -45,11 +45,8 @@ public class AttackHandler {
 		this.msgGenerator = msgGenerator;
 		this.cardsManager = cardsManager;
 		this.turns = turns;
+		attackState.registerNotifications();
 	}
-	
-	public void registerCallback (IAttackNotifications notificationsCallback) {
-    	attackState.registerNotifications(notificationsCallback);
-    }
 	
 	public void nextAttackState() {
     	attackState.getState().leave();

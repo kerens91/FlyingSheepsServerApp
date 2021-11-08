@@ -91,13 +91,11 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 		logger.info("GAME MANAGER started...");
 		
 		game = new Game();
-		game.registerCallback(this);
 		
 		attackHandler = game.getAttackHandler();
 		attackGenerator = game.getAttackGenerator();
 		
 		socketsHandler = new SocketHandler();
-		socketsHandler.registerCallback(this);
 		socketsHandler.run();
 	}
 	
@@ -165,8 +163,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	*/
 	private void startNewGameHandler() {
 		logger.info("Starting the game");
-		game.startGame(this);
-		game.registerPlayerNotifications(this);
+		game.startGame();
 		socketsHandler.sendBroadcastStartGame();
 		
 		Map<String,GameInfo> playersInfo = game.getGameInfo();

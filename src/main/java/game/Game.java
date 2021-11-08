@@ -2,9 +2,7 @@ package game;
 
 import static globals.Constants.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,10 +16,6 @@ import clientservershared.GameInfo;
 import clientservershared.GameOver;
 import clientservershared.GameOver.WinType;
 import clientservershared.PickedCards;
-import clientservershared.PlayerModel;
-import eventnotifications.IAttackNotifications;
-import eventnotifications.ICardNotifications;
-import eventnotifications.IPlayerNotifications;
 import game.gameattacks.AttackHandler;
 import game.gameattacks.AttackMsgGenerator;
 import game.gameattacks.AttacksGenerator;
@@ -57,26 +51,19 @@ public class Game {
     private Boolean showCoopBtn;
 	
 	public Game() {
-		configs = Configs.getInstance();
-        isGameCreated = false;
+		isGameCreated = false;
         isGameActive = false;
         showCoopBtn = false;
         
+		configs = Configs.getInstance();
         turns = new TurnsLinkedList();
         playersManager = new PlayersManager();
         gameNotifier = new EventNotifier();
         gameOverInfo = new GameOver();
-        cardsManager = new CardsManager();
         attackState = new GameAttackState();
         attackMsgGenerator = new AttackMsgGenerator(attackState);
     	attackHandler = new AttackHandler(attackState, playersManager, attackMsgGenerator, cardsManager, turns);
     	attackGenerator = new AttacksGenerator(attackHandler);
-    }
-    
-    
-	public void registerCallback (GameManager notificationsCallback) {
-		gameNotifier.registerCallback(notificationsCallback);
-    	attackHandler.registerCallback((IAttackNotifications)notificationsCallback);
     }
     
     public String getPassword() {
@@ -111,82 +98,50 @@ public class Game {
 		logger.info("A new game is created, with " + numPlayers + " players");
     	playersManager.setNumOfPlayers(numPlayers);
     	deck = new Deck(numPlayers);
+    	cardsManager = new CardsManager(deck);
     	isGameCreated = true;
     }
 	
-    public void startGame(ICardNotifications gameManager) {
+    public void startGame() {
     	logger.info("Starting game...");
     	
-    	initDeck(gameManager);
+    	deck.initCards();
     	setPlayersHands();
-    	addNonPlayableCardsToDeck();
+    	cardsManager.addNonPlayableCardsToDeck();
     	
     	isGameActive = true;
-    	logger.info("The game is starting...");
     	
-    	startCircularTurns();
-    }
-    
-    private void initDeck(ICardNotifications gameManager) {
-    	deck.initCards(gameManager);
-    	deck.shuffle();
-    }
-    
-    private void addNonPlayableCardsToDeck() {
-    	deck.addDisasterCards();
-    	deck.shuffle();
-    	deck.printCardsInDeck();
-    }
-    
-    
-    
-    private void startCircularTurns() {
     	turns.addPlayers(playersManager.getPlayers());
+    	playersManager.registerPlayerNotifications();
+    	
+    	logger.info("The game is starting...");
     }
     
-    public GameInfo getPlayerInfo(String playerId) {
-    	List<PlayerModel> playersModels = new ArrayList<>();
-    	List<CardModel> cards = new ArrayList<>();
+    
+    
+    public GameInfo getPlayerInfo(String playerId, String currentPlayer) {
     	GameInfo info = new GameInfo();
     	
-    	for (Player p : playersManager.getPlayers()) {
-    		PlayerModel pm = new PlayerModel(p.getId(), p.getPlayerScore(), p.getName(), p.getImg(), p.isActive());
-    		if (p.getId().equals(turns.getCurrentPlayerId())) {
-				pm.setMyTurn(true);
-			}
-    		
-    		// get my info
-    		if (p.getId().equals(playerId)) {
-    			info.setMyPlayer(pm);
-    			for (AbstractCard c : p.getHand()) {
-    				CardModel cm = getCardInfo(c.getId());
-    				cards.add(cm);
-    			}
-    		}
-    		// get other players info
-    		else {
-    			playersModels.add(pm);
-    		}
-    	}
+    	info.setPlayers(playersManager.getPlayersModels(playerId, currentPlayer));
+    	info.setMyPlayer(playersManager.getPlayerModel(playerId, currentPlayer));
+    	info.setCards(cardsManager.getCardsModels(playersManager.getPlayer(playerId).getHand()));
     	
-    	info.setCards(cards);
-    	info.setPlayers(playersModels);
     	return info;
     }
     
     public Map<String,GameInfo> getGameInfo() {
     	Map<String,GameInfo> playersIdToInfoMap = new HashMap<>();
     	
+    	String currentPlayer = turns.getCurrentPlayerId();
     	for (String playerId : playersManager.getPlayersIds()) {
-    		playersIdToInfoMap.put(playerId, getPlayerInfo(playerId));
+    		playersIdToInfoMap.put(playerId, getPlayerInfo(playerId, currentPlayer));
     	}
     	
     	return playersIdToInfoMap;
     }
     
-    public CardModel getCardInfo(int cardId) {
-    	AbstractCard c = deck.getCard(cardId);
-    	return c.getCardInfo();
+    public CardModel getCardInfo(int csrdId) {
+    	return cardsManager.getCardInfo(csrdId);
     }
     
 	public void showCoopButtonIfNeeded() {
@@ -221,9 +176,6 @@ public class Game {
 		return playersManager.allPlayersJoined() ? ALL_PLAYERS_JOINED : playersManager.getNumOfActivePlayers();
     }
 
-	public void registerPlayerNotifications(IPlayerNotifications gameManager) {
-    	playersManager.registerPlayerNotifications(gameManager);
-	}
 	
     private void putInUsedcardsPile(AbstractCard card) {
     	gameNotifier.cardUsed(card.getCardInfo());
@@ -270,6 +222,8 @@ public class Game {
 		}
 	}
 	
+	// change to runnable send func
+	// move this to picked cards
 	public void handlePickedCards(String playerId, PickedCards cards) {
 		int card1, card2;
 		Player player = playersManager.getPlayer(playerId);
@@ -301,26 +255,27 @@ public class Game {
     	}
     }
 	
+	
 	public void getCardFromDeck(String playerId) {
 		getCardFromDeck(playersManager.getPlayer(playerId));
     }
 	
-    public void getCardFromDeck(Player player) {
-    	AbstractCard card = deck.getCardFromDeck();
-    	if (card == null) {
-    		noMoreCards();
-    		gameOver();
-    		return;
-    	}
-    	logger.debug("get card from deck: " + card.getName());
-    	if (card.playCardFromDeck(player) == CARD_END_TURN) {
-    		logger.debug("got card " + card.getName() + "from deck is calling end turn");
-    		endTurn();
-    	}
+	public void getCardFromDeck(Player player) {
+		switch (cardsManager.getCardFromDeck(player)) {
+		case CARD_NULL:
+			noMoreCardsGameOver();
+			break;
+		case END_TURN:
+			endTurn();
+			break;
+		case DONE:
+    		logger.info("got card from deck done");
+			break;
+		}
     }
     
     public void setSpecialCard(int specialCardId) {
-		cardsManager.setSpecialCard(deck.getCard(specialCardId));
+		cardsManager.setSpecialCard(specialCardId);
 		showCoopButtonIfNeeded();
 	}
     
@@ -390,7 +345,7 @@ public class Game {
     	gameOver();
     }
     
-    private void noMoreCards() {
+    private void noMoreCardsGameOver() {
     	int highScore = 0;
     	Player winner = null;
     	for (Player p : playersManager.getActivePlayers()) {
@@ -400,6 +355,7 @@ public class Game {
 			}
 		}
     	updateGameOverInfo(winner, GameOver.WinType.WinType_Points);
+    	gameOver();
     }
     
     /*

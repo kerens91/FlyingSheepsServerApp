@@ -15,6 +15,7 @@ import database.DriverSQL;
 import database.entity.CardEntity;
 import database.entity.DecoreEntity;
 import eventnotifications.ICardNotifications;
+import game.GameManager;
 import globals.Configs;
 import globals.Constants;
 
@@ -100,7 +101,7 @@ public class Deck {
 		return false;
 	}
 	
-	public void initCards(ICardNotifications gameManager) {
+	public void initCards() {
 		int numToCreate;
 		DecoreEntity cardDecore;
 		DriverSQL database = DriverSQL.getInstance();
@@ -123,7 +124,7 @@ public class Deck {
 							cardEntity.getValue(), 
 							cardDecore.getPointsImg(), 
 							cardEntity.getCardStrings());
-					card.registerCallback(gameManager);
+					card.registerCallback(GameManager.getInstance());
 					allCards.put(totalNumOfCards, card);
 					totalNumOfCards++;
 					
@@ -139,6 +140,8 @@ public class Deck {
 				}
 			}
 		}
+		
+		shuffle();
 		logger.info("initCards: total number of cards is " + totalNumOfCards);
 		logger.info("initCards: number of cards in deck is " + numOfCards);
 	}

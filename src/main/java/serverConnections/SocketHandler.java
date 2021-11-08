@@ -19,6 +19,7 @@ import clientservershared.CardModel;
 import clientservershared.GameInfo;
 import clientservershared.GameOver;
 import eventnotifications.IClientRequestNotifications;
+import game.GameManager;
 import globals.Configs;
 import globals.Constants;
 
@@ -35,9 +36,7 @@ public class SocketHandler implements Runnable{
 	/* Server socket members */
 	private ServerSocket listener;
 	private ExecutorService executor;
-	
-	private IClientRequestNotifications gameManager;
-	
+		
 	public SocketHandler()
 	{
 		logger.info("SOCKET HANDLER started...");
@@ -68,13 +67,9 @@ public class SocketHandler implements Runnable{
 	
 	private void handleClientConnection() {
 		String clientId = UUID.randomUUID().toString();
-		ClientHandler clientThread = new ClientHandler(client, clientId, gameManager);
+		ClientHandler clientThread = new ClientHandler(client, clientId);
 		clients.put(clientId, clientThread);
 		executor.execute(clientThread);
-	}
-	
-	public void registerCallback(IClientRequestNotifications gameManager) {
-		this.gameManager = gameManager;
 	}
 
 	public void setClientActive(String clientId) {

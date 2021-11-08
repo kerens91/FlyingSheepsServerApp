@@ -11,6 +11,7 @@ import card.AbstractCard;
 import card.types.AbstractPlayableCard;
 import card.types.AbstractValueableCard;
 import eventnotifications.IPlayerNotifications;
+import game.GameManager;
 
 
 public class Player {
@@ -32,8 +33,8 @@ public class Player {
 		this.img = img;
 	}
 	
-	public void registerCallback (IPlayerNotifications playerNotifications) {
-    	this.playerNotifications = playerNotifications;
+	public void registerCallback () {
+    	this.playerNotifications = GameManager.getInstance();
     }
 	
 	public void addCardToPlayerHand(AbstractCard card) {

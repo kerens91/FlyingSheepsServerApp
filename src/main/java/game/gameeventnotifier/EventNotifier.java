@@ -14,9 +14,9 @@ public class EventNotifier {
 	private static final Logger logger = LogManager.getLogger(EventNotifier.class);
 	private IGameNotifications gameNotificationsCallback;
 
-	public void registerCallback (GameManager notificationsCallback) {
-    	gameNotificationsCallback = (IGameNotifications)notificationsCallback;
-    }
+	public EventNotifier() {
+		gameNotificationsCallback = (IGameNotifications)GameManager.getInstance();
+	}
 	
 	private void notifyGameEvent(Runnable callback) {
 		Optional.ofNullable(gameNotificationsCallback)

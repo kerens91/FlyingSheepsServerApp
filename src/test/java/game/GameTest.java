@@ -9,7 +9,7 @@ public class GameTest {
 	@Test
 	public void startGame() {
 		int numOfPlayers = 2;
-		Game game = Game.getInstance();
+		Game game = new Game();
 		game.createNewGame(numOfPlayers);
 		fail("Failed to create a new game");
 	}

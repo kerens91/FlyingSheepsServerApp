@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import clientservershared.PickedCards;
 import eventnotifications.IClientRequestNotifications;
+import game.GameManager;
 
 
 
@@ -16,10 +17,10 @@ public class MessageHandler {
 	private IClientRequestNotifications clientNotifications;
 	private String clientId;
 	
-	public MessageHandler(String id, IClientRequestNotifications clientNotifications) {
+	public MessageHandler(String id) {
 		convertor = new MessageConvertor();
-		this.clientId = id;
-		this.clientNotifications = clientNotifications;
+		clientId = id;
+		clientNotifications = GameManager.getInstance();
 	}
 	
 	public void handleMsg(String jsomMsg) {

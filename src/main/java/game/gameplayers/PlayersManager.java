@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import card.AbstractCard;
+import clientservershared.CardModel;
+import clientservershared.PlayerModel;
 import eventnotifications.IPlayerNotifications;
 import game.Game;
 import globals.Configs;
@@ -38,10 +41,8 @@ public class PlayersManager {
         idToPlayersMap = new HashMap<>();
 	}
     
-    public void registerPlayerNotifications(IPlayerNotifications playerNotification) {
-    	for (Player player : idToPlayersMap.values()) {
-    		player.registerCallback(playerNotification);
-    	}
+    public void registerPlayerNotifications() {
+    	idToPlayersMap.values().forEach(player -> player.registerCallback());
 	}
     
     public int getNumOfPlayers() {
@@ -143,6 +144,18 @@ public class PlayersManager {
 	public Boolean allPlayersJoined() {
 		return numOfActivePlayers == numOfPlayers;
     }
+	
+	public List<PlayerModel> getPlayersModels(String id, String current) {
+		return idToPlayersMap.values()
+				.stream()
+				.filter(player -> id != player.getId())
+				.map(player -> new PlayerModel(player, current))
+				.collect(Collectors.toList());
+	}
+
+	public PlayerModel getPlayerModel(String playerId, String currentPlayer) {
+		return new PlayerModel(idToPlayersMap.get(playerId), currentPlayer);
+	}
 	
 
 	

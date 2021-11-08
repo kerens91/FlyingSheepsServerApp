@@ -32,7 +32,7 @@ public class ClientHandler implements Runnable {
 	private MessageCreator msgCreator;
 	private String request;
 	
-	public ClientHandler(Socket clientSocket, String id, IClientRequestNotifications clientNotifications) {
+	public ClientHandler(Socket clientSocket, String id) {
 		this.clientId = id;
 		this.socket = clientSocket;
 		this.isClientActive = false;
@@ -44,7 +44,7 @@ public class ClientHandler implements Runnable {
 			e.printStackTrace();
 		}
 		
-		msgHandler = new MessageHandler(id, clientNotifications);
+		msgHandler = new MessageHandler(id);
 		msgCreator = new MessageCreator();
 	}
 	

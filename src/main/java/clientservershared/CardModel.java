@@ -1,5 +1,7 @@
 package clientservershared;
 
+import card.AbstractCard;
+
 public class CardModel {
 	private int id;
     private String name;

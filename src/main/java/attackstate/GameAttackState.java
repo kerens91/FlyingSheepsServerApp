@@ -10,6 +10,7 @@ import attackstate.states.PreAttack;
 import attackstate.states.SuccessAttack;
 import card.AbstractCard;
 import eventnotifications.IAttackNotifications;
+import game.GameManager;
 import game.gameplayers.Player;
 
 public class GameAttackState {
@@ -84,7 +85,7 @@ public class GameAttackState {
 	}
 
 
-	public void registerNotifications(IAttackNotifications notificationsCallback) {
-		AbstractAttackState.current.registerCallback(notificationsCallback);
+	public void registerNotifications() {
+		AbstractAttackState.current.registerCallback(GameManager.getInstance());
 	}
 }
