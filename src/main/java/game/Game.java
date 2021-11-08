@@ -56,9 +56,7 @@ public class Game {
     
     private Boolean showCoopBtn;
 	
-	private static Game game_instance = null;
-	
-	private Game() {
+	public Game() {
 		configs = Configs.getInstance();
         isGameCreated = false;
         isGameActive = false;
@@ -75,12 +73,6 @@ public class Game {
     	attackGenerator = new AttacksGenerator(attackHandler);
     }
     
-	public static Game getInstance() {
-    	if (game_instance == null) {
-    		game_instance = new Game();
-    	}
-    	return game_instance;
-    }
     
 	public void registerCallback (GameManager notificationsCallback) {
 		gameNotifier.registerCallback(notificationsCallback);
