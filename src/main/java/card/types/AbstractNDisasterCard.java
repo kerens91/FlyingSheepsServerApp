@@ -56,6 +56,11 @@ private HashMap<Integer,HashMap<Integer,AttackMsgInfo>> cardStrings;
 		return cardStrings.get(state).get(destination);
 	}
 	
+	@Override
+		public Boolean isPlayable() {
+			return false;
+		}
+	
 	public HashMap<Integer,HashMap<Integer,AttackMsgInfo>> initCardsStrings(List<StringEntity> strings) {
 		HashMap<Integer, HashMap<Integer, AttackMsgInfo>> stateToStringMap = new HashMap<>();
 		HashMap<Integer,AttackMsgInfo> destToStringMap;

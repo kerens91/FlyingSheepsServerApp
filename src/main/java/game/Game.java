@@ -54,7 +54,10 @@ public class Game {
 		isGameCreated = false;
         isGameActive = false;
         showCoopBtn = false;
-        
+        initMembers();
+    }
+	
+	private void initMembers() {
 		configs = Configs.getInstance();
         turns = new TurnsLinkedList();
         playersManager = new PlayersManager();
@@ -64,7 +67,7 @@ public class Game {
         attackMsgGenerator = new AttackMsgGenerator(attackState);
     	attackHandler = new AttackHandler(attackState, playersManager, attackMsgGenerator, cardsManager, turns);
     	attackGenerator = new AttacksGenerator(attackHandler);
-    }
+	}
     
     public String getPassword() {
 		return password;
@@ -194,7 +197,7 @@ public class Game {
 		logger.debug("handleCoupleCardsPicked: card1 " + c1.getName() + ", card2 " + c2.getName());
 		putInUsedcardsPile(c2);
 		
-		if (c1 instanceof AbstractPlayableCard && c2 instanceof AbstractPlayableCard) {
+		if (c1.isPlayable() && c2.isPlayable()) {
 			((AbstractPlayableCard) c1).playerPickedCouple(player, (AbstractPlayableCard) c2);
 		}
 		else {
@@ -214,7 +217,7 @@ public class Game {
 		logger.debug("handleSingleCardPicked: card " + c.getName());
 		putInUsedcardsPile(c);
 		
-		if (c instanceof AbstractPlayableCard) {
+		if (c.isPlayable()) {
 			((AbstractPlayableCard) c).playerPickedCard(player);
 		}
 		else {
@@ -222,29 +225,11 @@ public class Game {
 		}
 	}
 	
-	// change to runnable send func
-	// move this to picked cards
 	public void handlePickedCards(String playerId, PickedCards cards) {
-		int card1, card2;
 		Player player = playersManager.getPlayer(playerId);
-		
-		switch (cards.getNumOfPickedCards()) {
-			case NO_PICKED_CARDS:
-				logger.error("No cards picked");
-				break;
-			case SINGLE_PICKED_CARD:
-				card1 = cards.getCard1();
-				handleSingleCardPicked(player, card1);
-				break;
-			case COUPLE_PICKED_CARDS:
-				card1 = cards.getCard1();
-				card2 = cards.getCard2();
-				handleCoupleCardsPicked(player, card1, card2);
-				break;
-
-			default:
-				break;
-		}
+		cards.handlePickedCards(
+				() -> handleSingleCardPicked(player, cards.getCard1()), 
+				() -> handleCoupleCardsPicked(player, cards.getCard1(), cards.getCard2()));
 	}
     
 	private void setPlayersHands() {
@@ -254,7 +239,6 @@ public class Game {
     		}
     	}
     }
-	
 	
 	public void getCardFromDeck(String playerId) {
 		getCardFromDeck(playersManager.getPlayer(playerId));

@@ -3,6 +3,9 @@ package game.gamecards;
 import static card.types.AbstractOwnerableCard.cardFeatureType.*;
 import static game.gamecards.CardsManager.getCardRes.*;
 import static globals.Constants.CARD_END_TURN;
+import static globals.Constants.COUPLE_PICKED_CARDS;
+import static globals.Constants.NO_PICKED_CARDS;
+import static globals.Constants.SINGLE_PICKED_CARD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +20,9 @@ import org.apache.logging.log4j.Logger;
 import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
 import clientservershared.CardModel;
-import clientservershared.GameOver;
+import clientservershared.PickedCards;
 import game.gamecards.deck.Deck;
 import game.gameplayers.Player;
-import game.gameplayers.PlayersManager;
-import globals.Configs;
 
 public class CardsManager {
 	private static final Logger logger = LogManager.getLogger(CardsManager.class);
@@ -80,15 +81,18 @@ public class CardsManager {
     	deck.printCardsInDeck();
     }
     
+
+    
     public getCardRes getCardFromDeck(Player player) {
     	AbstractCard card = deck.getCardFromDeck();
-    	// change to optional
-    	if (card == null) {
+    	
+    	if (null == card) {
     		return CARD_NULL;
     	}
+    	
     	logger.debug("get card from deck: " + card.getName());
-    	if (card.playCardFromDeck(player) == CARD_END_TURN) {
-    		logger.debug("got card " + card.getName() + "from deck is calling end turn");
+    	if (CARD_END_TURN == card.playCardFromDeck(player)) {
+    		logger.debug("calling end turn");
     		return END_TURN;
     	}
     	return DONE;

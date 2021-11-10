@@ -1,6 +1,7 @@
 package card;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import clientservershared.CardModel;
 import eventnotifications.ICardNotifications;
@@ -25,6 +26,7 @@ public abstract class AbstractCard {
 	}
 	
 	public abstract Boolean playCardFromDeck(Player player);
+	public abstract Boolean isPlayable();
 	
 	public int getId() {
 		return gameId;
@@ -42,7 +44,7 @@ public abstract class AbstractCard {
 		return img;
 	}
 
-	public HashMap<Integer, String> getRelatedString() {
+	public Map<Integer, String> getRelatedString() {
 		return relatedString;
 	}
 

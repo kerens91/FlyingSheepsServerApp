@@ -23,6 +23,11 @@ public abstract class AbstractPlayableCard extends AbstractCard {
 		return Constants.CARD_END_TURN;
 	}
 	
+	@Override
+	public Boolean isPlayable() {
+		return true;
+	}
+	
 	public abstract void playerPickedCard(Player player);
 	
 	public void playerPickedCouple(Player player, AbstractPlayableCard c) {

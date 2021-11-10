@@ -1,5 +1,7 @@
 package game.gamecards.deck;
 
+import static globals.Constants.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,6 @@ import card.CardFactory;
 import database.DriverSQL;
 import database.entity.CardEntity;
 import database.entity.DecoreEntity;
-import eventnotifications.ICardNotifications;
 import game.GameManager;
 import globals.Configs;
 import globals.Constants;
@@ -25,8 +26,8 @@ public class Deck {
 	private static final Logger logger = LogManager.getLogger(Deck.class);
 	private Configs conf;
 	private Map<Integer,AbstractCard> allCards;		// hashmap with all cards (including the duplicates)
-	private ArrayList<Integer> deck;				// cards in deck
-	private ArrayList<Integer> disasterCards;		// nature disaster type cards IDs
+	private List<Integer> deck;				// cards in deck
+	private List<Integer> disasterCards;		// nature disaster type cards IDs
 	private volatile int totalNumOfCards;			// total number of cards
 	private volatile int numOfCards;				// number of cards in deck
 	private volatile int numPlayers;				// number of players in game
@@ -39,8 +40,8 @@ public class Deck {
 		deck = new ArrayList<>();
 		disasterCards = new ArrayList<>();
 		numPlayers = numOfPlayers;
-		numOfCards = Constants.NO_CARDS_IN_DECK;
-		totalNumOfCards = Constants.NO_CARDS_IN_DECK;
+		numOfCards = NO_CARDS_IN_DECK;
+		totalNumOfCards = NO_CARDS_IN_DECK;
 		cardsFactory = CardFactory.getInstance();
 	}
 	
@@ -48,11 +49,9 @@ public class Deck {
 		return allCards.get(id);
 	}
 	
-	public AbstractCard getCardFromDeck() {
-		AbstractCard card = null;
-		
-		if (numOfCards == Constants.NO_CARDS_IN_DECK) {
-			return card;
+	public AbstractCard getCardFromDeck() {	
+		if (numOfCards == NO_CARDS_IN_DECK) {
+			return null;
 		}
 		
 		int lastCardId = deck.get(numOfCards-1);
@@ -61,8 +60,7 @@ public class Deck {
 		
 		logger.info("getCardFromDeck: number of cards in deck is: " + numOfCards);
 		
-		card = getCard(lastCardId);
-		return card;
+		return getCard(lastCardId);
 	}
 	
 	public void shuffle() {
@@ -79,19 +77,6 @@ public class Deck {
 		logger.info("Add to deck " + card.getName() + ", index = " + card.getId());
 		deck.add(card.getId());
 		numOfCards++;
-	}
-	
-	private Boolean isDisasterCard(CardEntity cardInfo) {
-		if (cardInfo.getType().equals(conf.getStringProperty(Constants.TYPE_AVALANCHE))) {
-			return true;
-		}
-		if (cardInfo.getType().equals(conf.getStringProperty(Constants.TYPE_PIT))) {
-			return true;
-		}
-		if (cardInfo.getType().equals(conf.getStringProperty(Constants.TYPE_CLIFF))) {
-			return true;
-		}
-		return false;
 	}
 	
 	private Boolean isStealCard(CardEntity cardInfo) {
@@ -128,7 +113,7 @@ public class Deck {
 					allCards.put(totalNumOfCards, card);
 					totalNumOfCards++;
 					
-					if (isDisasterCard(cardEntity)) {
+					if (!card.isPlayable()) {
 						disasterCards.add(card.getId());
 					}
 					else if(isStealCard(cardEntity)) {
