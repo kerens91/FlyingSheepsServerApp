@@ -2,6 +2,7 @@ package card.types;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import attackmsg.AttackMsgInfo;
 import attackstate.interfaces.IAttackDefensable;
@@ -15,7 +16,7 @@ import globals.Constants;
 
 
 public abstract class AbstractNDisasterCard extends AbstractCard implements IAttackStatable, IAttackDefensable {
-private HashMap<Integer,HashMap<Integer,AttackMsgInfo>> cardStrings;
+private Map<Integer,Map<Integer,AttackMsgInfo>> cardStrings;
 	
 	public AbstractNDisasterCard(int typeId, int gameId, String name, String img, List<StringEntity> strings) {
 		super(typeId, gameId, name, img);
@@ -61,9 +62,9 @@ private HashMap<Integer,HashMap<Integer,AttackMsgInfo>> cardStrings;
 			return false;
 		}
 	
-	public HashMap<Integer,HashMap<Integer,AttackMsgInfo>> initCardsStrings(List<StringEntity> strings) {
-		HashMap<Integer, HashMap<Integer, AttackMsgInfo>> stateToStringMap = new HashMap<>();
-		HashMap<Integer,AttackMsgInfo> destToStringMap;
+	public Map<Integer,Map<Integer,AttackMsgInfo>> initCardsStrings(List<StringEntity> strings) {
+		Map<Integer, Map<Integer, AttackMsgInfo>> stateToStringMap = new HashMap<>();
+		Map<Integer,AttackMsgInfo> destToStringMap;
 		AttackMsgInfo msg;
 		int state, destination;
 		

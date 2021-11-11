@@ -101,10 +101,7 @@ public class AttackHandler {
     }
     
     public Boolean isPlayerVictim(Player player) {
-    	if (attackState.getVictim().getId().equals(player.getId())) {
-			return true;
-		}
-    	return false;
+    	return (attackState.getVictim().getId().equals(player.getId()));
     }
     
     public Boolean isAttackActive() {
@@ -114,14 +111,6 @@ public class AttackHandler {
     public Boolean isVictimDefended() {
     	return attackState.victimDefended();
     }
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     public Map<Integer, AttackMsgWrapper> notifyDefensableAttack() {

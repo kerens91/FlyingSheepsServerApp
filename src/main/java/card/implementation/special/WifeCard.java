@@ -14,10 +14,7 @@ public class WifeCard extends AbstractOwnerableCard {
 
 	@Override
 	public Boolean isCouple(AbstractCard card) {
-		if (card instanceof HusbandCard) {
-			return true;
-		}
-		return false;
+		return (card instanceof HusbandCard);
 	}
 
 	@Override

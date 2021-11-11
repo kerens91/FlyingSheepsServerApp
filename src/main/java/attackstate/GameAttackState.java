@@ -27,10 +27,7 @@ public class GameAttackState {
 	
 	
 	public Boolean isAttackActive() {
-		if (AbstractAttackState.current == AbstractAttackState.noAttack) {
-			return false;
-		}
-		return true;
+		return !(AbstractAttackState.current == AbstractAttackState.noAttack);
 	}
 	
 	public AbstractAttackState getState() {
@@ -78,10 +75,7 @@ public class GameAttackState {
 	}
 	
 	public Boolean victimDefended() {
-		if (((IAttackDefensable) getAttackCard()).defenseSucceeded(getHelperCard())) {
-			return true;
-		}
-		return false;
+		return (((IAttackDefensable) getAttackCard()).defenseSucceeded(getHelperCard()));
 	}
 
 

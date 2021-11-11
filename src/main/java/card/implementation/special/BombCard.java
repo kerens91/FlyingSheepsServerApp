@@ -13,10 +13,7 @@ public class BombCard extends AbstractOwnerableCard {
 
 	@Override
 	public Boolean isCouple(AbstractCard card) {
-		if (card instanceof SuperFlyingCard) {
-			return true;
-		}
-		return false;
+		return (card instanceof SuperFlyingCard);
 	}
 	
 	@Override

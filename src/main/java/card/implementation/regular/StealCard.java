@@ -42,9 +42,6 @@ public class StealCard extends AbstractAttackCard implements IAttackDefensable {
 
 	@Override
 	public Boolean defenseSucceeded(AbstractCard defenseCard) {
-		if (((IDefenseCard) defenseCard).isStealDefenseCard()) {
-			return true;
-		}
-		return false;
+		return (((IDefenseCard) defenseCard).isStealDefenseCard());
 	}
 }
