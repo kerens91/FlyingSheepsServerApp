@@ -9,10 +9,20 @@ import attackstate.states.NoAttack;
 import attackstate.states.PreAttack;
 import attackstate.states.SuccessAttack;
 import card.AbstractCard;
-import eventnotifications.IAttackNotifications;
 import game.GameManager;
 import game.gameplayers.Player;
 
+/**
+* This class manages the game attack states.
+* It is responsible for initiating the different states classes.
+* It initiate current state as No-attack state.
+* 
+* This class defines APIs for accessing the attack states,
+* the current state and the attack information.
+* This APIs are called from AttackHandler class during the game.
+* 
+* @author      Keren Solomon
+*/
 public class GameAttackState {
 	public GameAttackState() {
 		AbstractAttackState.noAttack = new NoAttack();
