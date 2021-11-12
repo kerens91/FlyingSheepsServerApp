@@ -1,6 +1,5 @@
 package card.types;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,7 @@ import globals.Constants;
 
 public abstract class AbstractNDisasterCard extends AbstractCard implements IAttackStatable, IAttackDefensable {
 private Map<Integer,Map<Integer,AttackMsgInfo>> cardStrings;
+private Map<Integer,Map<Integer,AttackMsgInfo>> cardStrings2;
 	
 	public AbstractNDisasterCard(int typeId, int gameId, String name, String img, List<StringEntity> strings) {
 		super(typeId, gameId, name, img);
@@ -61,42 +61,6 @@ private Map<Integer,Map<Integer,AttackMsgInfo>> cardStrings;
 		public Boolean isPlayable() {
 			return false;
 		}
-	
-	public Map<Integer,Map<Integer,AttackMsgInfo>> initCardsStrings(List<StringEntity> strings) {
-		Map<Integer, Map<Integer, AttackMsgInfo>> stateToStringMap = new HashMap<>();
-		Map<Integer,AttackMsgInfo> destToStringMap;
-		AttackMsgInfo msg;
-		int state, destination;
-		
-		System.out.println("strings for card " + getName() + ":");
-		
-		for (StringEntity info : strings) {
-			state = info.getState();
-			destination = info.getDest();
-			msg = new AttackMsgInfo(info.getType(), info.getPre(), info.getString(), info.getPost());
-			
-			if (stateToStringMap.containsKey(state)) {
-				destToStringMap = stateToStringMap.get(state);
-				
-				if (destToStringMap.containsKey(destination)) {
-					System.out.println("msg already exists");
-				}
-				else {
-					destToStringMap.put(destination, msg);
-					stateToStringMap.replace(state, destToStringMap);
-				}
-			}
-			else {
-				destToStringMap = new HashMap<>(Constants.DEST_NUM);
-				destToStringMap.put(destination, msg);
-				stateToStringMap.put(state, destToStringMap);
-			}
-			
-			System.out.println("type " + info.getType() + ", pre = " + info.getPre() + ", " + info.getString() + ", post = " + info.getPost());
-		}
-		
-		return stateToStringMap;
-	}
 	
 	@Override
 		public CardModel getCardInfo() {

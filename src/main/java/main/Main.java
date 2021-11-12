@@ -7,6 +7,7 @@ public class Main {
 		
 		/* starting the game manager will start the database, server and game... */
 		GameManager gameManager = GameManager.getInstance();
+		gameManager.init();
 	}
 
 }

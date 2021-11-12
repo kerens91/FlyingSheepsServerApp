@@ -89,14 +89,6 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	private GameManager() {
 		logger.info("GAME MANAGER started...");
-		
-		game = new Game();
-		
-		attackHandler = game.getAttackHandler();
-		attackGenerator = game.getAttackGenerator();
-		
-		socketsHandler = new SocketHandler();
-		socketsHandler.run();
 	}
 	
 	private static GameManager gameManagerInstance = null;
@@ -105,6 +97,18 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 			gameManagerInstance = new GameManager();
 		}
 		return gameManagerInstance;
+	}
+	
+	public void init() {
+		logger.info("GAME MANAGER started...");
+		
+		game = new Game();
+		
+		attackHandler = game.getAttackHandler();
+		attackGenerator = game.getAttackGenerator();
+		
+		socketsHandler = new SocketHandler();
+		socketsHandler.run();
 	}
 	
 	/**
