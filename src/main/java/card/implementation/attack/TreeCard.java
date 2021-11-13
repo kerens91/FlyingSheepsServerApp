@@ -14,6 +14,9 @@ import game.gameplayers.Player;
 * 
 * This class inherits from the AbstractAttackCard class,
 * thus implementing all it's methods.
+* It means that when the card is used by the player, an attack starts.
+* This class implements IAttackFailable interface, that is to say, the
+* attack can fail.
 * 
 * A tree attack is attack carried out by a player,
 * against all other players in the game,

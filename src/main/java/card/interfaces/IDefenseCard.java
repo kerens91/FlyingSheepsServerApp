@@ -9,5 +9,5 @@ public interface IDefenseCard {
 	Boolean isCliffDefenseCard();
 	Boolean isAvalancheDefenseCard();
 	
-	void pickedDefenseCard(AbstractCard card, Player player);
+	void pickedDefenseCard(Player player);
 }

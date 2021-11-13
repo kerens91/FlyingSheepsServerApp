@@ -13,6 +13,7 @@ import game.gameplayers.Player;
 * 
 * This class inherits from the AbstractAttackCard class,
 * thus implementing all it's methods.
+* It means that when the card is used by the player, an attack starts.
 * 
 * A rock attack is attack carried out by a player,
 * against another chosen player,
