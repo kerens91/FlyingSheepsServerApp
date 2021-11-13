@@ -4,7 +4,7 @@ import static card.types.AbstractOwnerableCard.cardFeatureType.FEATURE_TYPE_WIN;
 
 import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Super Flying Sheep Card.

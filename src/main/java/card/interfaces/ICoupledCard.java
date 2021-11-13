@@ -1,7 +1,7 @@
 package card.interfaces;
 
 import card.AbstractCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
  * 

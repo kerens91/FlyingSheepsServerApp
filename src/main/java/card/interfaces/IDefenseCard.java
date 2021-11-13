@@ -1,6 +1,6 @@
 package card.interfaces;
 
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
  * 

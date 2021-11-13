@@ -1,4 +1,4 @@
-package game.gameattacks;
+package game.attacks;
 
 import java.util.List;
 import java.util.Random;
@@ -13,10 +13,10 @@ import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
 import card.types.AbstractPlayableCard;
 import game.Game;
-import game.gamecards.CardsManager;
-import game.gameplayers.Player;
-import game.gameplayers.PlayersManager;
-import game.gameturns.TurnsLinkedList;
+import game.cards.CardsManager;
+import game.players.Player;
+import game.players.PlayersManager;
+import game.turns.TurnsLinkedList;
 
 public class AttacksGenerator {
 	private static final Logger logger = LogManager.getLogger(AttacksGenerator.class);

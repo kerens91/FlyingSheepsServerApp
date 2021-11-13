@@ -10,7 +10,7 @@ import attackstate.states.PreAttack;
 import attackstate.states.SuccessAttack;
 import card.AbstractCard;
 import game.GameManager;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class manages the game attack states.

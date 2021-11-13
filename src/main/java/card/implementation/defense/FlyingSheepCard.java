@@ -2,7 +2,7 @@ package card.implementation.defense;
 
 import card.interfaces.IDefenseCard;
 import card.types.AbstractValueableCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Flying Sheep Card.

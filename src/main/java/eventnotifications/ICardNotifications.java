@@ -1,7 +1,7 @@
 package eventnotifications;
 
 import card.AbstractCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 public interface ICardNotifications {
 	void onGotFromDeckSpecial(int cardId);

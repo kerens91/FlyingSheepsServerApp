@@ -1,4 +1,4 @@
-package game.gameattacks;
+package game.attacks;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,7 @@ import static globals.Constants.CARD_END_TURN;
 
 import card.AbstractCard;
 import clientservershared.CardModel;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * Abstract Playable Card class defines the cards that can be played by players.

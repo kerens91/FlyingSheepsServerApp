@@ -1,10 +1,10 @@
-package game.gameturns;
+package game.turns;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import game.gameplayers.Player;
+import game.players.Player;
 
 
 

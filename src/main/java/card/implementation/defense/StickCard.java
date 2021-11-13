@@ -2,7 +2,7 @@ package card.implementation.defense;
 
 import card.interfaces.IDefenseCard;
 import card.types.AbstractPlayableCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Shepherd Stick Card.

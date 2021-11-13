@@ -1,4 +1,4 @@
-package game.gamecards.deck;
+package game.cards;
 
 import static globals.Constants.*;
 
@@ -89,8 +89,7 @@ public class Deck {
 	public void initCards() {
 		int numToCreate;
 		DecoreEntity cardDecore;
-		DriverSQL database = DriverSQL.getInstance();
-		List<CardEntity> cards = database.getCardsInfo();
+		List<CardEntity> cards = GameManager.getInstance().getCardsInfo();
 		
 		if (cards != null) {
 			for (CardEntity cardEntity : cards) {

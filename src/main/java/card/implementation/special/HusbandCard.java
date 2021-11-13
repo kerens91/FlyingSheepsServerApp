@@ -4,7 +4,7 @@ import static card.types.AbstractOwnerableCard.cardFeatureType.FEATURE_TYPE_COOP
 
 import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Flying Husband Sheep Card.

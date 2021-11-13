@@ -7,7 +7,7 @@ import attackmsg.AttackMsgInfo;
 import attackstate.interfaces.IAttackStatable;
 import card.AbstractCard;
 import eventnotifications.IAttackNotifications;
-import game.gameplayers.Player;
+import game.players.Player;
 import globals.Configs;
 
 /**

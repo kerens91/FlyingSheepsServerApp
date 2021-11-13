@@ -5,7 +5,7 @@ import static card.types.AbstractOwnerableCard.cardFeatureType.FEATURE_TYPE_COOP
 import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
 import card.types.AbstractOwnerableCard.cardFeatureType;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Flying Wife Sheep Card.

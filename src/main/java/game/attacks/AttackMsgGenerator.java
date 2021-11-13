@@ -1,4 +1,4 @@
-package game.gameattacks;
+package game.attacks;
 
 import static globals.Constants.DEST_ALL;
 import static globals.Constants.DEST_ATTACKER;

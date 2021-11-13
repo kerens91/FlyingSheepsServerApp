@@ -7,7 +7,7 @@ import card.AbstractCard;
 import card.interfaces.IDefenseCard;
 import card.types.AbstractAttackCard;
 import database.entity.StringEntity;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Steal Card.

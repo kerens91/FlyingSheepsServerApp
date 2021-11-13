@@ -7,23 +7,17 @@ import database.entity.CardsEntityManager;
 
 
 public class DriverSQL {
-	CardsEntityManager cardsEntityManager;
+	private CardsEntityManager cardsEntityManager;
+	private List<CardEntity> cardsInfo;
 	
-	
-	private DriverSQL() {
+	public DriverSQL() {
 		cardsEntityManager = new CardsEntityManager();
 	}
 	
-	private static DriverSQL driverSqlInstance = null;
-	
-	public static DriverSQL getInstance() {
-		if (driverSqlInstance == null) {
-			driverSqlInstance = new DriverSQL();
-		}
-		return driverSqlInstance;
+	public List<CardEntity> getCardsInfo() {
+		return cardsInfo;
 	}
-	
-	
+
 	public void printCardDb() {
 		cardsEntityManager.connectToDb();
 		cardsEntityManager.printCardDb();
@@ -37,14 +31,10 @@ public class DriverSQL {
 		cardsEntityManager.disConnectFromDb();
 	}
 	
-	
-	public List<CardEntity> getCardsInfo() {
-		List<CardEntity> cards = null;
+	public void getCardsInfoFromDb() {
 		cardsEntityManager.connectToDb();
-		cards = cardsEntityManager.getCards();
+		cardsInfo = cardsEntityManager.getCards();
 		cardsEntityManager.disConnectFromDb();
-		return cards;
 	}
-	
 	
 }

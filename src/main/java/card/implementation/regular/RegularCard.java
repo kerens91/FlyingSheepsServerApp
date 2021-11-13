@@ -6,7 +6,7 @@ import card.CardFactory;
 import card.interfaces.ICoupledCard;
 import card.types.AbstractPlayableCard;
 import card.types.AbstractValueableCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents a regular Card.

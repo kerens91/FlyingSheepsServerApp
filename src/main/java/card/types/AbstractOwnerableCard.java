@@ -1,7 +1,7 @@
 package card.types;
 
 import card.interfaces.ICoupledCard;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * Abstract Ownerable Card class defines the cards that can have owners.

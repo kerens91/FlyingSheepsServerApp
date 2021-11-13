@@ -7,7 +7,7 @@ import attackmsg.AttackMsgInfo;
 import attackstate.interfaces.IAttackStatable;
 import card.AbstractCard;
 import database.entity.StringEntity;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * Abstract Attack Card class defines a type of card - attack card.

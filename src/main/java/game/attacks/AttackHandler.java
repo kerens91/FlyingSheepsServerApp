@@ -1,4 +1,4 @@
-package game.gameattacks;
+package game.attacks;
 
 import static globals.Constants.*;
 
@@ -21,10 +21,10 @@ import card.types.AbstractOwnerableCard;
 import card.types.AbstractPlayableCard;
 import clientservershared.AttackMsg;
 import eventnotifications.IAttackNotifications;
-import game.gamecards.CardsManager;
-import game.gameplayers.Player;
-import game.gameplayers.PlayersManager;
-import game.gameturns.TurnsLinkedList;
+import game.cards.CardsManager;
+import game.players.Player;
+import game.players.PlayersManager;
+import game.turns.TurnsLinkedList;
 import globals.Constants;
 
 public class AttackHandler {

@@ -1,7 +1,7 @@
 package card.types;
 
 import clientservershared.CardModel;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * Abstract Valueable Card class defines the cards that have a numeric value.

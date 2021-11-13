@@ -11,7 +11,7 @@ import attackstate.interfaces.IAttackStatable;
 import card.AbstractCard;
 import clientservershared.CardModel;
 import database.entity.StringEntity;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * Abstract Nature Disaster Card class defines a type of card - nature disaster card.

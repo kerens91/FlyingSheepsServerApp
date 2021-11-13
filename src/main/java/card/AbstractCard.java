@@ -9,7 +9,7 @@ import attackmsg.AttackMsgInfo;
 import clientservershared.CardModel;
 import database.entity.StringEntity;
 import eventnotifications.ICardNotifications;
-import game.gameplayers.Player;
+import game.players.Player;
 import globals.Configs;
 
 /**

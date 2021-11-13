@@ -16,18 +16,44 @@ import clientservershared.GameInfo;
 import clientservershared.GameOver;
 import clientservershared.GameOver.WinType;
 import clientservershared.PickedCards;
-import game.gameattacks.AttackHandler;
-import game.gameattacks.AttackMsgGenerator;
-import game.gameattacks.AttacksGenerator;
-import game.gamecards.CardsManager;
-import game.gamecards.deck.Deck;
-import game.gameeventnotifier.EventNotifier;
-import game.gameplayers.Player;
-import game.gameplayers.PlayersManager;
-import game.gameturns.TurnsLinkedList;
+import game.attacks.AttackHandler;
+import game.attacks.AttackMsgGenerator;
+import game.attacks.AttacksGenerator;
+import game.cards.CardsManager;
+import game.cards.Deck;
+import game.eventnotifier.EventNotifier;
+import game.players.Player;
+import game.players.PlayersManager;
+import game.turns.TurnsLinkedList;
 import globals.Configs;
 
-
+/**
+* The Game class defines a single game.
+* This class is responsible for creating the game, starting the game and handling main steps
+* and operations in the game.
+* 
+* The Game class is created by the GameManager class when there is a new game request,
+* generates a password as an id, in which the players will use to join the game.
+* The Game class provides APIs for the GameManager use.
+* The GameManager listens to events coming from Game class regarding the ongoing game.
+* 
+* The Game class makes use of other classes services, each of which is responsible for a different part of the game:
+* <ul>
+* <li>playersManager - manages the players in game
+* <li>turns - keeps track of the turns
+* <li>deck - handles the deck of cards
+* <li>cardsManager - manages the cards in the game
+* <li>attackGenerator - manages the attacks in the game
+* <li>attackHandler - handles the secondary operations required as a result of the attacks
+* <li>attackMsgGenerator - generates the game attack messages
+* <li>gameNotifier - defines the game events
+* </ul>
+* 
+* Once created, the Game class initiates each of the above classes as a member.
+* Thus, each game has it's own set of classes, concentrated and handled by the Game class.
+* 
+* @author      Keren Solomon
+*/
 public class Game {
 	private static final Logger logger = LogManager.getLogger(Game.class);
 	private Configs configs;
@@ -36,15 +62,13 @@ public class Game {
 	private String password;		// generated when game created
 	
 	private PlayersManager playersManager;
-    private Deck deck;				// Deck of cards
-    private TurnsLinkedList turns;	// linkedlist implementing players turns
-    private GameAttackState attackState;
+    private Deck deck;
+    private TurnsLinkedList turns;
     private AttackHandler attackHandler;
     private AttackMsgGenerator attackMsgGenerator;
     private AttacksGenerator attackGenerator;
     private EventNotifier gameNotifier;
     private CardsManager cardsManager;
-    
     
     private GameOver gameOverInfo;
     
@@ -63,7 +87,7 @@ public class Game {
         playersManager = new PlayersManager();
         gameNotifier = new EventNotifier();
         gameOverInfo = new GameOver();
-        attackState = new GameAttackState();
+        GameAttackState attackState = new GameAttackState();
         attackMsgGenerator = new AttackMsgGenerator(attackState);
     	attackHandler = new AttackHandler(attackState, playersManager, attackMsgGenerator, cardsManager, turns);
     	attackGenerator = new AttacksGenerator(attackHandler);

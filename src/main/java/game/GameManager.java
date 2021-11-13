@@ -5,6 +5,7 @@ import static globals.Constants.DEST_ALL;
 import static globals.Constants.DEST_ATTACKER;
 import static globals.Constants.DEST_VICTIM;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,76 +17,54 @@ import clientservershared.CardModel;
 import clientservershared.GameInfo;
 import clientservershared.GameOver;
 import clientservershared.PickedCards;
+import database.DriverSQL;
+import database.entity.CardEntity;
 import eventnotifications.IAttackNotifications;
 import eventnotifications.ICardNotifications;
 import eventnotifications.IClientRequestNotifications;
 import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
-import game.gameattacks.AttackHandler;
-import game.gameattacks.AttackMsgGenerator;
-import game.gameattacks.AttackMsgWrapper;
-import game.gameattacks.AttacksGenerator;
-import game.gameplayers.Player;
+import game.attacks.AttackHandler;
+import game.attacks.AttackMsgGenerator;
+import game.attacks.AttackMsgWrapper;
+import game.attacks.AttacksGenerator;
+import game.players.Player;
 import serverConnections.SocketHandler;
 
 /**
-* GameManager is the managing unit of the Game component,
-* which coordinates requests from all other components and enables
-* synchronization between them, as well as 
-* the class is created once, when the application starts running,
-* called by the Main class.
-* The GameManager class 
-* which allow an application to draw onto components realized on
-* various devices or onto off-screen images.
-* A Graphics object encapsulates the state information needed
-* for the various rendering operations that Java supports.  This
-* state information includes:
+* The GameManager class is the managing unit of the Game component,
+* it is a singleton class, created once by the main class when the application start to run.
+* 
+* The GameManager is the only class in the application that access the components that runs
+* sockets managing and database managing.
+* The GameManager also has a Game member that runs the game.
+* Only a single game is currently supported.
+* 
+* The game manager implements multiple interfaces:
 * <ul>
-* <li>The Component to draw on
-* <li>A translation origin for rendering and clipping coordinates
-* <li>The current clip
-* <li>The current color
-* <li>The current font
-* <li>The current logical pixel operation function (XOR or Paint)
-* <li>The current XOR alternation color
-*     (see <a href="#setXORMode">setXORMode</a>)
+* <li>IGameNotifications - game events
+* <li>ICardNotifications - cards events
+* <li>IPlayerNotifications - players events
+* <li>IClientRequestNotifications - clients connections events
+* <li>IAttackNotifications - attacks events
 * </ul>
-* <p>
-* Coordinates are infinitely thin and lie between the pixels of the
-* output device.
-* Operations which draw the outline of a figure operate by traversing
-* along the infinitely thin path with a pixel-sized pen that hangs
-* down and to the right of the anchor point on the path.
-* Operations which fill a figure operate by filling the interior
-* of the infinitely thin path.
-* Operations which render horizontal text render the ascending
-* portion of the characters entirely above the baseline coordinate.
-* <p>
-* Some important points to consider are that drawing a figure that
-* covers a given rectangle will occupy one extra row of pixels on
-* the right and bottom edges compared to filling a figure that is
-* bounded by that same rectangle.
-* Also, drawing a horizontal line along the same y coordinate as
-* the baseline of a line of text will draw the line entirely below
-* the text except for any descenders.
-* Both of these properties are due to the pen hanging down and to
-* the right from the path that it traverses.
-* <p>
-* All coordinates which appear as arguments to the methods of this
-* Graphics object are considered relative to the translation origin
-* of this Graphics object prior to the invocation of the method.
-* All rendering operations modify only pixels which lie within the
-* area bounded by both the current clip of the graphics context
-* and the extents of the Component used to create the Graphics object.
+* The game manager listens to the events coming from the different components,
+* and handles (or call the handling function) based on all the information.
+* 
+* The GameManager constitute as the linking unit for all the components in the application.
 * 
 * @author      Keren Solomon
 */
 public class GameManager implements IGameNotifications, ICardNotifications, IPlayerNotifications, IClientRequestNotifications, IAttackNotifications {
 	private static final Logger logger = LogManager.getLogger(GameManager.class);
-	private Game game;						// represents the current running game
+	
+	private Game game;
 	private AttackHandler attackHandler;
 	private AttacksGenerator attackGenerator;
-	private SocketHandler socketsHandler;	// manages clients requsts and responses
+	
+	private SocketHandler socketsHandler;
+	
+	private DriverSQL database;
 	
 	private GameManager() {
 		logger.info("GAME MANAGER started...");
@@ -106,6 +85,9 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 		
 		attackHandler = game.getAttackHandler();
 		attackGenerator = game.getAttackGenerator();
+		
+		database = new DriverSQL();
+		database.getCardsInfoFromDb();
 		
 		socketsHandler = new SocketHandler();
 		socketsHandler.run();
@@ -421,6 +403,10 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 			.ifPresent(attackMsgWrapper -> {
 				socketsHandler.sendMultipleClientsAttackMsg(attackMsgWrapper.getDestinations(), attackMsgWrapper.getMsg());
 		});
+	}
+	
+	public List<CardEntity> getCardsInfo() {
+		return database.getCardsInfo();
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
-package game.gamecards;
+package game.cards;
 
 import static card.types.AbstractOwnerableCard.cardFeatureType.*;
-import static game.gamecards.CardsManager.getCardRes.*;
+import static game.cards.CardsManager.getCardRes.*;
 import static globals.Constants.CARD_END_TURN;
 import static globals.Constants.COUPLE_PICKED_CARDS;
 import static globals.Constants.NO_PICKED_CARDS;
@@ -21,8 +21,7 @@ import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
 import clientservershared.CardModel;
 import clientservershared.PickedCards;
-import game.gamecards.deck.Deck;
-import game.gameplayers.Player;
+import game.players.Player;
 
 public class CardsManager {
 	private static final Logger logger = LogManager.getLogger(CardsManager.class);

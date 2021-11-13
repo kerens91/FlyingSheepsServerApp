@@ -1,4 +1,4 @@
-package game.gameeventnotifier;
+package game.eventnotifier;
 
 import java.util.Optional;
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import card.types.AbstractAttackCard;
 import database.entity.StringEntity;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Rock Card.

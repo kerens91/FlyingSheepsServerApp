@@ -1,6 +1,6 @@
 package clientservershared;
 
-import game.gameplayers.Player;
+import game.players.Player;
 
 public class PlayerModel {
 	private String playerId;

@@ -5,7 +5,7 @@ import java.util.List;
 import attackstate.interfaces.IAttackFailable;
 import card.types.AbstractAttackCard;
 import database.entity.StringEntity;
-import game.gameplayers.Player;
+import game.players.Player;
 
 /**
 * This class represents the Tree Card.
