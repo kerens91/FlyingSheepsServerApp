@@ -1,5 +1,7 @@
 package card;
 
+import static globals.Constants.*;
+
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,9 +24,6 @@ import card.implementation.special.SuperFlyingCard;
 import card.implementation.special.WifeCard;
 import database.entity.StringEntity;
 import globals.Configs;
-import globals.Constants;
-
-
 
 public class CardFactory {
 	private static final Logger logger = LogManager.getLogger(CardFactory.class);
@@ -59,49 +58,49 @@ public class CardFactory {
 		
 		logger.info("creating " + type);
 		
-		if (type.equals(configs.getStringProperty(Constants.TYPE_PIT))) {
+		if (type.equals(configs.getStringProperty(TYPE_PIT))) {
 			card = new PitCard(typeId, id, name, img, strings);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_CLIFF))) {
+		else if (type.equals(configs.getStringProperty(TYPE_CLIFF))) {
 			card = new CliffCard(typeId, id, name, img, strings);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_AVALANCHE))) {
+		else if (type.equals(configs.getStringProperty(TYPE_AVALANCHE))) {
 			card = new AvalancheCard(typeId, id, name, img, strings);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_RIVER))) {
+		else if (type.equals(configs.getStringProperty(TYPE_RIVER))) {
 			card = new RiverCard(typeId, id, name, txtColor, img, frame, back, val, points, strings);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_ROCK))) {
+		else if (type.equals(configs.getStringProperty(TYPE_ROCK))) {
 			card = new RockCard(typeId, id, name, txtColor, img, frame, back, val, points, strings);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_TREE))) {
+		else if (type.equals(configs.getStringProperty(TYPE_TREE))) {
 			card = new TreeCard(typeId, id, name, txtColor, img, frame, back, val, points, strings);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_FLYING))) {
+		else if (type.equals(configs.getStringProperty(TYPE_FLYING))) {
 			card = new FlyingSheepCard(typeId, id, name, txtColor, img, frame, back, val, points);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_DOG))) {
+		else if (type.equals(configs.getStringProperty(TYPE_DOG))) {
 			card = new DogCard(typeId, id, name, txtColor, img, frame, back);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_STICK))) {
+		else if (type.equals(configs.getStringProperty(TYPE_STICK))) {
 			card = new StickCard(typeId, id, name, txtColor, img, frame, back);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_HUSBAND))) {
+		else if (type.equals(configs.getStringProperty(TYPE_HUSBAND))) {
 			card = new HusbandCard(typeId, id, name, txtColor, img, frame, back);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_WIFE))) {
+		else if (type.equals(configs.getStringProperty(TYPE_WIFE))) {
 			card = new WifeCard(typeId, id, name, txtColor, img, frame, back);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_BOMB))) {
+		else if (type.equals(configs.getStringProperty(TYPE_BOMB))) {
 			card = new BombCard(typeId, id, name, txtColor, img, frame, back);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_SUPER))) {
+		else if (type.equals(configs.getStringProperty(TYPE_SUPER))) {
 			card = new SuperFlyingCard(typeId, id, name, txtColor, img, frame, back);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_REGULAR))) {
+		else if (type.equals(configs.getStringProperty(TYPE_REGULAR))) {
 			card = new RegularCard(typeId, id, name, txtColor, img, frame, back, val, points);
 		}
-		else if (type.equals(configs.getStringProperty(Constants.TYPE_STEAL))) {
+		else if (type.equals(configs.getStringProperty(TYPE_STEAL))) {
 			card = new StealCard(typeId, id, name, txtColor, img, frame, back, val, points, strings);
 			stealCard = (StealCard) card;
 		}
@@ -113,7 +112,6 @@ public class CardFactory {
 		return card;
 	}
 	
-
     public StealCard getStealCard() {
 		return stealCard;
 	}

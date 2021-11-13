@@ -83,6 +83,20 @@ public abstract class AbstractCard {
 		this.cardNotifications = cardNotifications;
 	}
     
+	/**
+	 * This method is called when the card is created.
+	 * This method is responsible for initiating the strings map holding the related card
+	 * string messages that are displayed to the players screen during the game.
+	 * 
+	 * this method is used by the attack cards and nature disaster cards.
+	 * 
+	 * This method get a list of string entities, and map it based on the attack card state,
+	 * and the message receiver.
+	 * 
+	 * @param strings  the card related string messages.
+	 * 
+	 * @return  the strings mapped by state and destination.
+	 */
 	public Map<Integer,Map<Integer,AttackMsgInfo>> initCardsStrings(List<StringEntity> strings) {
 		Map<Integer, Map<Integer, AttackMsgInfo>> stateToStringMap = new HashMap<>();
 		

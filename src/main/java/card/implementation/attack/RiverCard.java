@@ -48,6 +48,8 @@ public class RiverCard extends AbstractAttackCard {
 	/**
 	 * This method indicates that the pre-attack state is not needed
 	 * for the river attack
+	 * 
+	 * @return  true|false	true if an action prior to the attack is needed, otherwise false.
 	 */
 	@Override
 	public Boolean preAttackNeeded() {

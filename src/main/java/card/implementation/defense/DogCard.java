@@ -56,6 +56,8 @@ public class DogCard extends AbstractPlayableCard implements IDefenseCard {
 	/**
 	 * This method indicates that the dog card can be used as a defense only
 	 * in case of a steal attack, thus return true for steal defense card method.
+	 * 
+	 * @return  true|false	true if the card can defend from a steal attack, otherwise false.
 	 */
 	@Override
 	public Boolean isStealDefenseCard() {
@@ -63,8 +65,9 @@ public class DogCard extends AbstractPlayableCard implements IDefenseCard {
 	}
 
 	/**
-	 * This method indicates that the dog card can be used as a defense only
-	 * in case of a steal attack, thus return false for pit attack attempt.
+	 * This method indicates that the dog card is not useful in case of a pit attack.
+	 * 
+	 * @return  true|false	true if the card can defend from a pit attack, otherwise false.
 	 */
 	@Override
 	public Boolean isPitDefenseCard() {
@@ -72,8 +75,9 @@ public class DogCard extends AbstractPlayableCard implements IDefenseCard {
 	}
 
 	/**
-	 * This method indicates that the dog card can be used as a defense only
-	 * in case of a steal attack, thus return false for cliff attack attempt.
+	 * This method indicates that the dog card is not useful in case of a cliff attack.
+	 * 
+	 * @return  true|false	true if the card can defend from a cliff attack, otherwise false.
 	 */
 	@Override
 	public Boolean isCliffDefenseCard() {
@@ -81,8 +85,9 @@ public class DogCard extends AbstractPlayableCard implements IDefenseCard {
 	}
 
 	/**
-	 * This method indicates that the dog card can be used as a defense only
-	 * in case of a steal attack, thus return false for avalanche attack attempt.
+	 * This method indicates that the dog card is not useful in case of an avalanche attack.
+	 * 
+	 * @return  true|false	true if the card can defend from an avalanche attack, otherwise false.
 	 */
 	@Override
 	public Boolean isAvalancheDefenseCard() {

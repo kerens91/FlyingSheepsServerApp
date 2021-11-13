@@ -54,8 +54,9 @@ public class StickCard extends AbstractPlayableCard implements IDefenseCard {
 	}
 	
 	/**
-	 * This method indicates that the shepherd stick card can be used as a defense only
-	 * in case of a nature disaster attack, thus return false for steal defense.
+	 * This method indicates that the shepherd stick card is not useful in case of a steal attack.
+	 * 
+	 * @return  true|false	true if the card can defend from a steal attack, otherwise false.
 	 */
 	@Override
 	public Boolean isStealDefenseCard() {
@@ -65,6 +66,8 @@ public class StickCard extends AbstractPlayableCard implements IDefenseCard {
 	/**
 	 * This method indicates that the shepherd stick card can be used as a defense only
 	 * in case of a nature disaster attack, thus return true for pit defense.
+	 * 
+	 * @return  true|false	true if the card can defend from a pit attack, otherwise false.
 	 */
 	@Override
 	public Boolean isPitDefenseCard() {
@@ -74,6 +77,8 @@ public class StickCard extends AbstractPlayableCard implements IDefenseCard {
 	/**
 	 * This method indicates that the shepherd stick card can be used as a defense only
 	 * in case of a nature disaster attack, thus return true for cliff defense.
+	 * 
+	 * @return  true|false	true if the card can defend from a cliff attack, otherwise false.
 	 */
 	@Override
 	public Boolean isCliffDefenseCard() {
@@ -83,6 +88,8 @@ public class StickCard extends AbstractPlayableCard implements IDefenseCard {
 	/**
 	 * This method indicates that the shepherd stick card can be used as a defense only
 	 * in case of a nature disaster attack, thus return true for avalanche defense.
+	 * 
+	 * @return  true|false	true if the card can defend from an avalanche attack, otherwise false.
 	 */
 	@Override
 	public Boolean isAvalancheDefenseCard() {

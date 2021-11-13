@@ -57,6 +57,8 @@ public class TreeCard extends AbstractAttackCard implements IAttackFailable {
 	/**
 	 * This method indicates that the pre-attack state is not needed
 	 * for the tree attack.
+	 * 
+	 * @return  true|false	true if an action prior to the attack is needed, otherwise false.
 	 */
 	@Override
 	public Boolean preAttackNeeded() {

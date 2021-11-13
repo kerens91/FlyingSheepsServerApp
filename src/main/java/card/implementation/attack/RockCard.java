@@ -49,7 +49,9 @@ public class RockCard extends AbstractAttackCard {
 	
 	/**
 	 * This method indicates that the pre-attack state is needed
-	 * for the rock attack, in order to get the victim for the attack
+	 * for the rock attack, in order to get the victim for the attack.
+	 * 
+	 * @return  true|false	true if an action prior to the attack is needed, otherwise false.
 	 */
 	@Override
 	public Boolean preAttackNeeded() {
