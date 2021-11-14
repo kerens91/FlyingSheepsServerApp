@@ -4,6 +4,7 @@ import static card.types.AbstractOwnerableCard.cardFeatureType.FEATURE_TYPE_WIN;
 
 import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
+import database.entity.CardEntity;
 import game.players.Player;
 
 /**
@@ -28,6 +29,16 @@ public class BombCard extends AbstractOwnerableCard {
 		super(typeId, gameId, name, txtColor, img, frame, back);
 	}
 
+	public BombCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getTxtCol(),
+				cEntity.getDecore().getImg(),
+				cEntity.getDecore().getFrameImg(),
+				cEntity.getDecore().getBackImg());
+	}
+	
 	/**
 	 * This method indicates that the cards are matching couple -
 	 * check that the other card is a Super-Flying Seep card.

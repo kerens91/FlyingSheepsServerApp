@@ -1,13 +1,18 @@
 package card.implementation.regular;
 
+import static globals.Constants.NAME_STEAL;
+
 import java.util.List;
+import java.util.function.Supplier;
 
 import attackstate.interfaces.IAttackDefensable;
 import card.AbstractCard;
 import card.interfaces.IDefenseCard;
 import card.types.AbstractAttackCard;
+import database.entity.CardEntity;
 import database.entity.StringEntity;
 import game.players.Player;
+import globals.Constants;
 
 /**
 * This class represents the Steal Card.
@@ -37,6 +42,19 @@ import game.players.Player;
 public class StealCard extends AbstractAttackCard implements IAttackDefensable {
 	public StealCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int value, String points, List<StringEntity> strings) {
 		super(typeId, gameId, name, txtColor, img, frame, back, value, points, strings);
+	}
+	
+	public StealCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getTxtCol(),
+				cEntity.getDecore().getImg(),
+				cEntity.getDecore().getFrameImg(),
+				cEntity.getDecore().getBackImg(),
+				cEntity.getValue(),
+				cEntity.getDecore().getPointsImg(),
+				cEntity.getCardStrings());
 	}
 	
 	/**
@@ -107,4 +125,6 @@ public class StealCard extends AbstractAttackCard implements IAttackDefensable {
 	public Boolean defenseSucceeded(AbstractCard defenseCard) {
 		return (((IDefenseCard) defenseCard).isStealDefenseCard());
 	}
+	
+	public static Supplier<String> stealCardNameSupplier = () -> NAME_STEAL;
 }

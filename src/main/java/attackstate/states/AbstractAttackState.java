@@ -44,14 +44,14 @@ import globals.Configs;
  * @author      Keren Solomon
  */
 public abstract class AbstractAttackState {
-	protected static final Logger logger = LogManager.getLogger(AbstractAttackState.class);
-	protected static Configs configs = Configs.getInstance();
-	protected static Player attacker;
-	protected static Player victim;
-	protected static AbstractCard attackCard;
-	protected static AbstractCard helperCard;
-	protected static Boolean attackResult;
-	protected static IAttackNotifications notifications;
+	static final Logger logger = LogManager.getLogger(AbstractAttackState.class);
+	static Configs configs = Configs.getInstance();
+	static Player attacker;
+	static Player victim;
+	static AbstractCard attackCard;
+	static AbstractCard helperCard;
+	static Boolean attackResult;
+	static IAttackNotifications notifications;
 	private int stateId;
 	
 	public AbstractAttackState(int stateId) {

@@ -2,6 +2,7 @@ package card.implementation.defense;
 
 import card.interfaces.IDefenseCard;
 import card.types.AbstractPlayableCard;
+import database.entity.CardEntity;
 import game.players.Player;
 
 /**
@@ -26,6 +27,16 @@ public class StickCard extends AbstractPlayableCard implements IDefenseCard {
 		super(typeId, gameId, name, txtColor, img, frame, back);
 	}
 
+	public StickCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getTxtCol(),
+				cEntity.getDecore().getImg(),
+				cEntity.getDecore().getFrameImg(),
+				cEntity.getDecore().getBackImg());
+	}
+	
 	/**
 	 * This method is called when a player in game picked to play
 	 * the Shepherd Stick card in it's turn.

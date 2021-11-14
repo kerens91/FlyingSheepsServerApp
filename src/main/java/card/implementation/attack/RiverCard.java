@@ -3,6 +3,7 @@ package card.implementation.attack;
 import java.util.List;
 
 import card.types.AbstractAttackCard;
+import database.entity.CardEntity;
 import database.entity.StringEntity;
 import game.players.Player;
 
@@ -27,6 +28,19 @@ import game.players.Player;
 public class RiverCard extends AbstractAttackCard {
 	public RiverCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int val, String points, List<StringEntity> strings) {
 		super(typeId, gameId, name, txtColor, img, frame, back, val, points, strings);
+	}
+	
+	public RiverCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getTxtCol(),
+				cEntity.getDecore().getImg(),
+				cEntity.getDecore().getFrameImg(),
+				cEntity.getDecore().getBackImg(),
+				cEntity.getValue(),
+				cEntity.getDecore().getPointsImg(),
+				cEntity.getCardStrings());
 	}
 	
 	/**

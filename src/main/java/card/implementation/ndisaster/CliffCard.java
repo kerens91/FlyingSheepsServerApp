@@ -5,6 +5,7 @@ import java.util.List;
 import card.AbstractCard;
 import card.interfaces.IDefenseCard;
 import card.types.AbstractNDisasterCard;
+import database.entity.CardEntity;
 import database.entity.StringEntity;
 
 /**
@@ -27,6 +28,14 @@ public class CliffCard extends AbstractNDisasterCard {
 		super(typeId, gameId, name, img, strings);
 	}
 
+	public CliffCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getImg(),
+				cEntity.getCardStrings());
+	}
+	
 	/**
 	 * This method is called when a player managed to use a defense card
 	 * to try defend himself from the cliff attack.

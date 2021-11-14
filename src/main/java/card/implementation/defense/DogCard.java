@@ -2,6 +2,7 @@ package card.implementation.defense;
 
 import card.interfaces.IDefenseCard;
 import card.types.AbstractPlayableCard;
+import database.entity.CardEntity;
 import game.players.Player;
 
 /**
@@ -24,6 +25,16 @@ import game.players.Player;
 public class DogCard extends AbstractPlayableCard implements IDefenseCard {
 	public DogCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back) {
 		super(typeId, gameId, name, txtColor, img, frame, back);
+	}
+	
+	public DogCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getTxtCol(),
+				cEntity.getDecore().getImg(),
+				cEntity.getDecore().getFrameImg(),
+				cEntity.getDecore().getBackImg());
 	}
 	
 	/**

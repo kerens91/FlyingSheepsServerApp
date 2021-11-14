@@ -5,6 +5,7 @@ import java.util.List;
 import card.AbstractCard;
 import card.interfaces.IDefenseCard;
 import card.types.AbstractNDisasterCard;
+import database.entity.CardEntity;
 import database.entity.StringEntity;
 
 /**
@@ -25,6 +26,14 @@ import database.entity.StringEntity;
 public class PitCard extends AbstractNDisasterCard {
 	public PitCard(int typeId, int gameId, String name, String img, List<StringEntity> strings) {
 		super(typeId, gameId, name, img, strings);
+	}
+	
+	public PitCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getImg(),
+				cEntity.getCardStrings());
 	}
 
 	/**

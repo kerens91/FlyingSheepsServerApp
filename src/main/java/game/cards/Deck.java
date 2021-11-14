@@ -6,139 +6,126 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import card.AbstractCard;
 import card.CardFactory;
-import database.DriverSQL;
+import card.implementation.regular.StealCard;
 import database.entity.CardEntity;
-import database.entity.DecoreEntity;
 import game.GameManager;
-import globals.Configs;
-import globals.Constants;
-
-
 
 public class Deck {
 	private static final Logger logger = LogManager.getLogger(Deck.class);
-	private Configs conf;
+	private CardFactory cardsFactory;
+
 	private Map<Integer,AbstractCard> allCards;		// hashmap with all cards (including the duplicates)
 	private List<Integer> deck;				// cards in deck
 	private List<Integer> disasterCards;		// nature disaster type cards IDs
-	private volatile int totalNumOfCards;			// total number of cards
-	private volatile int numOfCards;				// number of cards in deck
-	private volatile int numPlayers;				// number of players in game
-	
-	private CardFactory cardsFactory;
-	
+
+	private int totalNumOfCards;			// total number of cards
+	private int numOfCards;				// number of cards in deck
+	private int numPlayers;				// number of players in game
+
 	public Deck(int numOfPlayers) {
-		conf = Configs.getInstance();
+		cardsFactory = CardFactory.getInstance();
+
 		allCards = new HashMap<>();
 		deck = new ArrayList<>();
 		disasterCards = new ArrayList<>();
+
 		numPlayers = numOfPlayers;
 		numOfCards = NO_CARDS_IN_DECK;
 		totalNumOfCards = NO_CARDS_IN_DECK;
-		cardsFactory = CardFactory.getInstance();
+
 	}
-	
+
 	public AbstractCard getCard(int id) {
 		return allCards.get(id);
 	}
-	
+
 	public AbstractCard getCardFromDeck() {	
-		if (numOfCards == NO_CARDS_IN_DECK) {
+		if (isDeckEmpty.get()) {
 			return null;
 		}
-		
-		int lastCardId = deck.get(numOfCards-1);
-		deck.remove(numOfCards-1);
-		numOfCards--;
-		
-		logger.info("getCardFromDeck: number of cards in deck is: " + numOfCards);
-		
-		return getCard(lastCardId);
+		return allCards.get(removeCardFromDeck());
 	}
 	
 	public void shuffle() {
-		Random rand = new Random();
 		for (int i = 0; i<numOfCards; i++) {
-			int pos = i + rand.nextInt(numOfCards-i);
+			int pos = i + randomValue.apply(i);
 			int tmp = deck.get(pos);
 			deck.set(pos, deck.get(i));
 			deck.set(i, tmp);
 		}
 	}
-	
+
 	private void addCardToDeck(AbstractCard card) {
 		logger.info("Add to deck " + card.getName() + ", index = " + card.getId());
 		deck.add(card.getId());
 		numOfCards++;
 	}
-	
-	private Boolean isStealCard(CardEntity cardInfo) {
-		if (cardInfo.getType().equals(conf.getStringProperty(Constants.TYPE_STEAL))) {
-			return true;
-		}
-		return false;
+
+	private int removeCardFromDeck() {
+		int lastCardId = deck.get(numOfCards-1);
+		deck.remove(numOfCards-1);
+		numOfCards--;
+		return lastCardId;
 	}
-	
-	public void initCards() {
+
+	private void initCardHelper(List<CardEntity> cards) {
 		int numToCreate;
-		DecoreEntity cardDecore;
-		List<CardEntity> cards = GameManager.getInstance().getCardsInfo();
 		
-		if (cards != null) {
-			for (CardEntity cardEntity : cards) {
-				cardDecore = cardEntity.getDecore();
-				numToCreate = (cardEntity.getMult() * numPlayers) + (cardEntity.getAdd());
-				for (int i=0; i<numToCreate; i++) {
-					AbstractCard card = cardsFactory.createCard(
-							cardEntity.getType(), 
-							cardEntity.getId(), 
-							totalNumOfCards, 
-							cardEntity.getName(), 
-							cardDecore.getTxtCol(), 
-							cardDecore.getImg(), 
-							cardDecore.getFrameImg(), 
-							cardDecore.getBackImg(), 
-							cardEntity.getValue(), 
-							cardDecore.getPointsImg(), 
-							cardEntity.getCardStrings());
-					card.registerCallback(GameManager.getInstance());
-					allCards.put(totalNumOfCards, card);
-					totalNumOfCards++;
-					
-					if (!card.isPlayable()) {
-						disasterCards.add(card.getId());
-					}
-					else if(isStealCard(cardEntity)) {
-						logger.info("steal attack card in not a real card - don't add to deck");
-					}
-					else {
-						addCardToDeck(card);
-					}
+		for (CardEntity cardEntity : cards) {
+			
+			numToCreate = getNumCardsToCreate.apply(cardEntity.getMult(), cardEntity.getAdd());
+			while (numToCreate > 0) {
+				AbstractCard card = cardsFactory.createCard(cardEntity,	totalNumOfCards);
+				card.registerCallback(GameManager.getInstance());
+				allCards.put(totalNumOfCards, card);
+				totalNumOfCards++;
+
+				if (isNatureDisasterCard.test(card)) {
+					disasterCards.add(card.getId());
 				}
+				
+				if (isPlayableCard.and(isStealCard).negate().test(card)) {
+					addCardToDeck(card);
+				}
+				
+				numToCreate--;
 			}
 		}
-		
+	}
+
+	public void initCards() {
+		List<CardEntity> cards = GameManager.getInstance().getCardsInfo();
+
+		Optional.ofNullable(cards)
+		.ifPresentOrElse(
+				cardslist -> {
+					initCardHelper(cards);
+				},
+				() -> logger.error("Could't get cards from database"));
+
 		shuffle();
-		logger.info("initCards: total number of cards is " + totalNumOfCards);
-		logger.info("initCards: number of cards in deck is " + numOfCards);
 	}
-	
+
 	public void addDisasterCards() {
-		for (int cardId : disasterCards) {
-			AbstractCard card = allCards.get(cardId);
-			addCardToDeck(card);
-		}
-		logger.info("done adding cards: total number of cards is " + totalNumOfCards);
-		logger.info("done adding cards: number of cards in deck is " + numOfCards);
+		numOfCards += disasterCards.size();
+		deck = Stream.concat(disasterCards.stream(), deck.stream())
+				.collect(Collectors.toList());
 	}
-	
+
 	public void printCardsInDeck() {
 		logger.info("\nCards in Deck:");
 		for (int id : deck) {
@@ -146,4 +133,18 @@ public class Deck {
 			logger.info("[" + id + "] " + c.getName());
 		}
 	}
+
+	private BiFunction<Integer, Integer, Integer> getNumCardsToCreate = 
+			(mult, add) -> mult * numPlayers + add;
+			
+	private Predicate<AbstractCard> isStealCard = card -> 
+			card.getName().equals(StealCard.stealCardNameSupplier.get());
+			
+	private	Function<Integer, Integer> randomValue = (index) ->
+			(int)Math.floor(Math.random() * (numOfCards-index));
+			
+	private Predicate<AbstractCard> isPlayableCard = AbstractCard::isPlayable;
+	private Predicate<AbstractCard> isNatureDisasterCard = isPlayableCard.negate();
+	private Supplier<Boolean> isDeckEmpty = () -> NO_CARDS_IN_DECK == numOfCards;
+	
 }

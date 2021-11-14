@@ -6,6 +6,7 @@ import card.CardFactory;
 import card.interfaces.ICoupledCard;
 import card.types.AbstractPlayableCard;
 import card.types.AbstractValueableCard;
+import database.entity.CardEntity;
 import game.players.Player;
 
 /**
@@ -45,6 +46,18 @@ import game.players.Player;
 public class RegularCard extends AbstractValueableCard implements ICoupledCard {
 	public RegularCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int value, String points) {
 		super(typeId, gameId, name, txtColor, img, frame, back, value, points);
+	}
+	
+	public RegularCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getTxtCol(),
+				cEntity.getDecore().getImg(),
+				cEntity.getDecore().getFrameImg(),
+				cEntity.getDecore().getBackImg(),
+				cEntity.getValue(),
+				cEntity.getDecore().getPointsImg());
 	}
 
 	/**

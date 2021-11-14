@@ -4,6 +4,7 @@ import static card.types.AbstractOwnerableCard.cardFeatureType.FEATURE_TYPE_COOP
 
 import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
+import database.entity.CardEntity;
 import game.players.Player;
 
 /**
@@ -29,6 +30,16 @@ import game.players.Player;
 public class HusbandCard extends AbstractOwnerableCard {
 	public HusbandCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back) {
 		super(typeId, gameId, name, txtColor, img, frame, back);
+	}
+	
+	public HusbandCard(CardEntity cEntity, int gameId) {
+		super(cEntity.getId(),
+				gameId,
+				cEntity.getName(),
+				cEntity.getDecore().getTxtCol(),
+				cEntity.getDecore().getImg(),
+				cEntity.getDecore().getFrameImg(),
+				cEntity.getDecore().getBackImg());
 	}
 
 	@Override

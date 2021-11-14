@@ -25,22 +25,22 @@ public class Constants {
 	public static final Boolean CARD_END_TURN = true;
 	public static final Boolean CARD_DONT_END_TURN = false;
 	
-
-	public static final String TYPE_PIT = "card.type.pit";
-	public static final String TYPE_CLIFF = "card.type.cliff";
-	public static final String TYPE_AVALANCHE = "card.type.avalanche";
-	public static final String TYPE_RIVER = "card.type.river";
-	public static final String TYPE_ROCK = "card.type.rock";
-	public static final String TYPE_TREE = "card.type.tree";
-	public static final String TYPE_FLYING = "card.type.flying";
-	public static final String TYPE_DOG = "card.type.dog";
-	public static final String TYPE_STICK = "card.type.stick";
-	public static final String TYPE_HUSBAND = "card.type.husband";
-	public static final String TYPE_WIFE = "card.type.wife";
-	public static final String TYPE_BOMB = "card.type.bomb";
-	public static final String TYPE_SUPER = "card.type.super";
-	public static final String TYPE_REGULAR = "card.type.regular";
-	public static final String TYPE_STEAL = "card.type.steal";
+	public static final String TYPE_PIT = "pit";
+	public static final String TYPE_CLIFF = "cliff";
+	public static final String TYPE_AVALANCHE = "avalanche";
+	public static final String TYPE_RIVER = "river";
+	public static final String TYPE_ROCK = "rock";
+	public static final String TYPE_TREE = "tree";
+	public static final String TYPE_FLYING = "flying";
+	public static final String TYPE_DOG = "dog";
+	public static final String TYPE_STICK = "stick";
+	public static final String TYPE_HUSBAND = "husband";
+	public static final String TYPE_WIFE = "wife";
+	public static final String TYPE_BOMB = "bomb";
+	public static final String TYPE_SUPER = "super";
+	public static final String TYPE_REGULAR = "regular";
+	public static final String TYPE_STEAL = "steal";
+	public static final String NAME_STEAL = "Steal Attack";
 	
 	public static final int TXT_COLOR_BLACK = 0;
 	public static final int TXT_COLOR_WHITE = 1;
