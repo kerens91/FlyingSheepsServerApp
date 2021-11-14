@@ -391,7 +391,7 @@ public class Game {
     		}
     	}
     	else {
-        	turns.setActive(victim.getId(), false);
+        	turns.setPlayerNotActive(victim.getId());
         	victim.setActive(false);
         	playersManager.decreaseNumOfActivePlayers();
         	gameNotifier.lostGame(victim.getId());
