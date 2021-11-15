@@ -29,9 +29,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class WifeCard extends AbstractOwnerableCard {
-	public WifeCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back) {
-		super(typeId, gameId, name, txtColor, img, frame, back);
-	}
 
 	public WifeCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

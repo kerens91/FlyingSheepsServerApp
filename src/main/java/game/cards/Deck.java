@@ -126,14 +126,6 @@ public class Deck {
 				.collect(Collectors.toList());
 	}
 
-	public void printCardsInDeck() {
-		logger.info("\nCards in Deck:");
-		for (int id : deck) {
-			AbstractCard c = allCards.get(id);
-			logger.info("[" + id + "] " + c.getName());
-		}
-	}
-
 	private BiFunction<Integer, Integer, Integer> getNumCardsToCreate = 
 			(mult, add) -> mult * numPlayers + add;
 			

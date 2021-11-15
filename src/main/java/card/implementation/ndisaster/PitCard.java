@@ -24,9 +24,6 @@ import database.entity.StringEntity;
 * @author      Keren Solomon
 */
 public class PitCard extends AbstractNDisasterCard {
-	public PitCard(int typeId, int gameId, String name, String img, List<StringEntity> strings) {
-		super(typeId, gameId, name, img, strings);
-	}
 	
 	public PitCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

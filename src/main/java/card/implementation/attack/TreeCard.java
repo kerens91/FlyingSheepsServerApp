@@ -35,9 +35,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class TreeCard extends AbstractAttackCard implements IAttackFailable {
-	public TreeCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int val, String points, List<StringEntity> strings) {
-		super(typeId, gameId, name, txtColor, img, frame, back, val, points, strings);
-	}
 	
 	public TreeCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

@@ -4,6 +4,8 @@ import static globals.Constants.CARD_DONT_END_TURN;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import attackmsg.AttackMsgInfo;
 import attackstate.interfaces.IAttackDefensable;
@@ -132,9 +134,9 @@ public abstract class AbstractNDisasterCard extends AbstractCard implements IAtt
 	 * 
 	 */
 	@Override
-		public Boolean isPlayable() {
-			return false;
-		}
+	public Boolean isPlayable() {
+		return false;
+	}
 	
 	/**
 	 * This method is called when the server need to send the card information to the client,

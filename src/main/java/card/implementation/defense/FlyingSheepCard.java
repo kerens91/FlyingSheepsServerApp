@@ -26,9 +26,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class FlyingSheepCard extends AbstractValueableCard implements IDefenseCard {
-	public FlyingSheepCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int value, String points) {
-		super(typeId, gameId, name, txtColor, img, frame, back, value, points);
-	}
 	
 	public FlyingSheepCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

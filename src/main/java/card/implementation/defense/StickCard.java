@@ -23,9 +23,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class StickCard extends AbstractPlayableCard implements IDefenseCard {
-	public StickCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back) {
-		super(typeId, gameId, name, txtColor, img, frame, back);
-	}
 
 	public StickCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

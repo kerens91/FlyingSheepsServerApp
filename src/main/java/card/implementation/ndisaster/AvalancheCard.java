@@ -23,9 +23,6 @@ import database.entity.StringEntity;
 * @author      Keren Solomon
 */
 public class AvalancheCard extends AbstractNDisasterCard {
-	public AvalancheCard(int typeId, int gameId, String name, String img, List<StringEntity> strings) {
-		super(typeId, gameId, name, img, strings);
-	}
 
 	public AvalancheCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

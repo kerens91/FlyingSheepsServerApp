@@ -25,9 +25,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class BombCard extends AbstractOwnerableCard {
-	public BombCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back) {
-		super(typeId, gameId, name, txtColor, img, frame, back);
-	}
 
 	public BombCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

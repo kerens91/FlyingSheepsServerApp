@@ -23,9 +23,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class DogCard extends AbstractPlayableCard implements IDefenseCard {
-	public DogCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back) {
-		super(typeId, gameId, name, txtColor, img, frame, back);
-	}
 	
 	public DogCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

@@ -28,9 +28,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class RockCard extends AbstractAttackCard {
-	public RockCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int val, String points, List<StringEntity> strings) {
-		super(typeId, gameId, name, txtColor, img, frame, back, val, points, strings);
-	}
 	
 	public RockCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),

@@ -28,25 +28,37 @@ import card.implementation.special.HusbandCard;
 import card.implementation.special.SuperFlyingCard;
 import card.implementation.special.WifeCard;
 import database.entity.CardEntity;
-import database.entity.StringEntity;
-import globals.Configs;
 
 public class CardFactory {
 	private static final Logger logger = LogManager.getLogger(CardFactory.class);
 	private StealCard stealCard;
-	private Configs configs;
 
 	private static CardFactory factory_instance = null;
-
-	private CardFactory() {
-		configs = Configs.getInstance();
-	}
 
 	public static CardFactory getInstance() {
 		if (factory_instance == null) {
 			factory_instance = new CardFactory();
 		}
 		return factory_instance;
+	}
+	  
+	public AbstractCard createCard(CardEntity cEntity, int id) {
+		String cardType = cEntity.getType();
+		logger.info("creating " + cardType);
+		
+		BiFunction<CardEntity, Integer, AbstractCard> supplier = cardsSupplier.get(cardType);
+		AbstractCard card = supplier.apply(cEntity, id);
+
+		if (TYPE_STEAL.equals(cardType)) {
+			stealCard = (StealCard) card;
+		}
+		
+		logger.info("created" + card.getName());
+		return card;
+	}
+
+	public StealCard getStealCard() {
+		return stealCard;
 	}
 	
 	static BiFunction<CardEntity, Integer, AbstractCard> riverCardSupplier = RiverCard::new;
@@ -83,24 +95,4 @@ public class CardFactory {
 		  cardsSupplier.put(TYPE_WIFE, wifeCardSupplier);
 		  cardsSupplier.put(TYPE_STEAL, stealCardSupplier);
 	  }   
-	  
-	public AbstractCard createCard(CardEntity cEntity, int id) {
-		String cardType = cEntity.getType();
-		logger.info("creating " + cardType);
-		
-		BiFunction<CardEntity, Integer, AbstractCard> supplier = cardsSupplier.get(cardType);
-		AbstractCard card = supplier.apply(cEntity, id);
-
-		if (TYPE_STEAL.equals(cardType)) {
-			stealCard = (StealCard) card;
-		}
-		
-		logger.info("created" + card.getName());
-		return card;
-	}
-
-	public StealCard getStealCard() {
-		return stealCard;
-	}
-	
 }

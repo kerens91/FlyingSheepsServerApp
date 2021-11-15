@@ -44,9 +44,6 @@ import game.players.Player;
 * @author      Keren Solomon
 */
 public class RegularCard extends AbstractValueableCard implements ICoupledCard {
-	public RegularCard(int typeId, int gameId, String name, int txtColor, String img, String frame, String back, int value, String points) {
-		super(typeId, gameId, name, txtColor, img, frame, back, value, points);
-	}
 	
 	public RegularCard(CardEntity cEntity, int gameId) {
 		super(cEntity.getId(),
