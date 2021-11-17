@@ -10,6 +10,17 @@ import clientservershared.GameOver;
 import eventnotifications.IGameNotifications;
 import game.GameManager;
 
+/**
+* This class is responsible for managing the Game events.
+* The events are defined in the IGameNotifications interface.
+* 
+* This class has a gameNotificationsCallback member, that represents the GameManager as
+* a callback class that listens to the game events and handles it.
+* 
+* The events in this class are triggered by the Game class.
+* 
+* @author      Keren Solomon
+*/
 public class EventNotifier {
 	private static final Logger logger = LogManager.getLogger(EventNotifier.class);
 	private IGameNotifications gameNotificationsCallback;
