@@ -2,7 +2,6 @@ package game.attacks;
 
 import static globals.Constants.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,19 +13,33 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import attackmsg.AttackMsgInfo;
 import attackstate.GameAttackState;
 import card.AbstractCard;
 import card.types.AbstractOwnerableCard;
 import card.types.AbstractPlayableCard;
-import clientservershared.AttackMsg;
-import eventnotifications.IAttackNotifications;
 import game.cards.CardsManager;
 import game.players.Player;
 import game.players.PlayersManager;
 import game.turns.TurnsLinkedList;
-import globals.Constants;
 
+/**
+* This class represents the attack handler, the class that deals with the attacks in the game.
+* The class manages the attack states, and supplies set of APIs to handle the attacks.
+* 
+* The class is created by the Game class, and is used by the attack resolver and the attack generator.
+* 
+* The class is using the services of the following members:
+* <ul>
+* <li>attackState - handles the states of the attack.
+* <li>playersManager - handles the attacker and victim players of the attack.
+* <li>msgGenerator - generates attack messages that the server sends to the clients during the attacks.
+* <li>cardsManager - handles the attack card and the defense card of the attack.
+* <li>turns - handles the turns in game.
+* </ul>
+* each of the members is initiated by the Game class and sent to this class when it is created.
+* 
+* @author      Keren Solomon
+*/
 public class AttackHandler {
 	private static final Logger logger = LogManager.getLogger(AttackHandler.class);
 	private GameAttackState attackState;
@@ -34,7 +47,20 @@ public class AttackHandler {
 	private AttackMsgGenerator msgGenerator;
 	private CardsManager cardsManager;
 	private TurnsLinkedList turns;
-		
+	
+	/**
+	 * Creates an attack handler to handle the attacks in the game.
+	 * The AttackHandler class is created with all requires members to this class.
+	 * 
+	 * It is created by the Game class.
+	 * 
+	 * @param attackState    	represents the GameAttackState that handles the states of the attack.
+	 * @param playersManager    represents the PlayersManager that handles the attacker and victim players of the attack.
+	 * @param msgGenerator    	represents the AttackMsgGenerator that generates attack messages
+	 * 							that the server sends to the clients during the attacks.
+	 * @param cardsManager    	represents the CardsManager that handles the attack card and the defense card of the attack.
+	 * @param turns    			represents the TurnsLinkedList that handles the turns in game.
+	 */
 	public AttackHandler(GameAttackState attackState, 
 			PlayersManager playersManager, 
 			AttackMsgGenerator msgGenerator, 
@@ -112,8 +138,15 @@ public class AttackHandler {
     	return attackState.victimDefended();
     }
     
-    
-    public Map<Integer, AttackMsgWrapper> notifyDefensableAttack() {
+    public PlayersManager getPlayersManager() {
+		return playersManager;
+	}
+
+	public AttackMsgGenerator getMsgGenerator() {
+		return msgGenerator;
+	}
+
+	public Map<Integer, AttackMsgWrapper> notifyDefensableAttack() {
 		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
 		
 		String victim = getVictim();
@@ -133,99 +166,6 @@ public class AttackHandler {
 		nextAttackState();
 		return destToMsgMap;
 	}
-	
-	public Map<Integer, AttackMsgWrapper> rockAttackSucceeded() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-		
-		String victim = getVictim();
-		destToMsgMap.put(DEST_VICTIM, new AttackMsgWrapper(victim, msgGenerator.getMsgVicRockAttSuc()));
-		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(victim), msgGenerator.getMsgAllRockAttSuc()));
-		
-		return destToMsgMap;
-	}
-	
-	public Map<Integer, AttackMsgWrapper> stealAttackSucceeded() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-		
-		String victim = getVictim();
-		String attacker = getAttacker();
-		destToMsgMap.put(DEST_VICTIM, new AttackMsgWrapper(victim, msgGenerator.getMsgVicStealAttSuc()));
-		destToMsgMap.put(DEST_ATTACKER, new AttackMsgWrapper(attacker, msgGenerator.getMsgAttStealAttSuc()));
-		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(victim, attacker), msgGenerator.getMsgAllStealAttSuc()));
-
-		nextAttackState();
-		return destToMsgMap;
-	}
-	
-	public Map<Integer, AttackMsgWrapper> stealAttackFailed() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-		
-		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(), msgGenerator.getMsgAllStealAttFailed()));
-				
-		nextAttackState();
-		return destToMsgMap;
-	}
-	
-	public Map<Integer, AttackMsgWrapper> riverAttackSucceeded() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-
-		String attacker = getAttacker();
-		destToMsgMap.put(DEST_ATTACKER, new AttackMsgWrapper(attacker, msgGenerator.getMsgAllRiverAttSuc()));
-		
-		nextAttackState();
-		return destToMsgMap;
-	}
-	
-	public Map<Integer, AttackMsgWrapper> treeAttackSucceeded() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-		
-		String attacker = getAttacker();
-		destToMsgMap.put(DEST_ATTACKER, new AttackMsgWrapper(attacker, msgGenerator.getMsgTreeAttSuc(getSpecialCardsOwners())));
-		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(attacker), msgGenerator.getMsgAllTreeAtt()));
-
-		nextAttackState();
-		return destToMsgMap;
-	}
-	
-	public Map<Integer, AttackMsgWrapper> treeAttackFailed() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-
-		String attacker = getAttacker();
-		destToMsgMap.put(DEST_ATTACKER, new AttackMsgWrapper(attacker, msgGenerator.getMsgTreeAttFail()));
-		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(attacker), msgGenerator.getMsgAllTreeAtt()));
-		
-		nextAttackState();
-		return destToMsgMap;
-	}
-	
-	public Map<Integer, AttackMsgWrapper> natureDisasterAttackSucceeded() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-		
-		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(), msgGenerator.getMsgAllNatureAttSuc()));
-
-		nextAttackState();
-		return destToMsgMap;
-	}
-	
-	public Map<Integer, AttackMsgWrapper> natureDisasterAttackFailed() {
-		Map<Integer, AttackMsgWrapper> destToMsgMap = new HashMap<>(DEST_NUM);
-
-		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(), msgGenerator.getMsgAllNatureAttFail()));
-
-		nextAttackState();
-		return destToMsgMap;
-	}
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
 	
 	public AbstractCard getPlayerRandomCard(Player victim) {
     	Random rand = new Random();

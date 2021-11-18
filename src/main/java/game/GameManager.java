@@ -24,7 +24,6 @@ import eventnotifications.ICardNotifications;
 import eventnotifications.IClientRequestNotifications;
 import eventnotifications.IGameNotifications;
 import eventnotifications.IPlayerNotifications;
-import game.attacks.AttackHandler;
 import game.attacks.AttackMsgWrapper;
 import game.players.Player;
 import serverConnections.SocketHandler;
@@ -418,7 +417,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void rockAttackSucceeded() {
-		sendAttackMsg(game.getAttackHandler().rockAttackSucceeded());
+		sendAttackMsg(game.getAttackResolver().rockAttackSucceeded());
 	}
 	
 	@Override
@@ -427,12 +426,12 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 			// true - special card
 			game.showCoopButtonIfNeeded();
 		}
-		sendAttackMsg(game.getAttackHandler().stealAttackSucceeded());
+		sendAttackMsg(game.getAttackResolver().stealAttackSucceeded());
 	}
 	
 	@Override
 	public void stealAttackFailed() {
-		sendAttackMsg(game.getAttackHandler().stealAttackFailed());
+		sendAttackMsg(game.getAttackResolver().stealAttackFailed());
 	}
 	
 	@Override
@@ -443,7 +442,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void riverAttackSucceeded() {
-		sendAttackMsg(game.getAttackHandler().riverAttackSucceeded());
+		sendAttackMsg(game.getAttackResolver().riverAttackSucceeded());
 	}
 	
 	@Override
@@ -453,12 +452,12 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void treeAttackSucceeded() {
-		sendAttackMsg(game.getAttackHandler().treeAttackSucceeded());
+		sendAttackMsg(game.getAttackResolver().treeAttackSucceeded());
 	}
 	
 	@Override
 	public void treeAttackFailed() {
-		sendAttackMsg(game.getAttackHandler().treeAttackFailed());
+		sendAttackMsg(game.getAttackResolver().treeAttackFailed());
 	}
 	
 
@@ -466,13 +465,13 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	@Override
 	public void natureDisasterAttackSucceeded() {
 		Player victim = game.getAttackGenerator().doNatureDisasterAttack();
-		sendAttackMsg(game.getAttackHandler().natureDisasterAttackSucceeded());
+		sendAttackMsg(game.getAttackResolver().natureDisasterAttackSucceeded());
 		game.playerLoseGame(victim);
 	}
 	
 	@Override
 	public void natureDisasterAttackFailed() {
-		sendAttackMsg(game.getAttackHandler().natureDisasterAttackFailed());
+		sendAttackMsg(game.getAttackResolver().natureDisasterAttackFailed());
 	}
 	
 	@Override

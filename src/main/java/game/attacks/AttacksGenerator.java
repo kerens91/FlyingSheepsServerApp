@@ -1,27 +1,35 @@
 package game.attacks;
 
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import card.AbstractCard;
-import card.types.AbstractOwnerableCard;
-import card.types.AbstractPlayableCard;
-import game.Game;
-import game.cards.CardsManager;
 import game.players.Player;
-import game.players.PlayersManager;
-import game.turns.TurnsLinkedList;
 
+/**
+* This class represents the attack generator, that is responsible for handling the attack requests.
+* This class starts the actual attack operation.
+* 
+* The class is using the services of the attack handler class to handle the attacks.
+* 
+* The class is created by the Game class, and is used by the game manager class.
+* 
+* @author      Keren Solomon
+*/
 public class AttacksGenerator {
 	private static final Logger logger = LogManager.getLogger(AttacksGenerator.class);
 	private AttackHandler attackHandler;
 	
+	/**
+	 * Creates an attack generator to handle the attack requests.
+	 * The AttacksGenerator class is created with an attack handler member.
+	 * 
+	 * It is created by the Game class.
+	 * 
+	 * @param attackHandler    	represents the attack handler member.
+	 */
 	public AttacksGenerator(AttackHandler attackHandler) {
 		this.attackHandler = attackHandler;
 	}

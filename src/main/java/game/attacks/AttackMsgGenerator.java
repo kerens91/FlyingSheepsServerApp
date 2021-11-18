@@ -1,11 +1,6 @@
 package game.attacks;
 
-import static globals.Constants.DEST_ALL;
-import static globals.Constants.DEST_ATTACKER;
-import static globals.Constants.DEST_VICTIM;
-import static globals.Constants.MSG_ADD_ATT;
-import static globals.Constants.MSG_ADD_CARD;
-import static globals.Constants.MSG_ADD_VIC;
+import static globals.Constants.*;
 
 import java.util.List;
 
@@ -16,10 +11,35 @@ import attackmsg.AttackMsgInfo;
 import attackstate.GameAttackState;
 import clientservershared.AttackMsg;
 
+/**
+* This class represents the attack message generator, that is responsible for generating the attack messages.
+* 
+* The class generates four types of attack messages:
+* <ul>
+* <li>TwoImg - includes two images. presented as a pop up.
+* <li>TitleImg - includes a title string and an image. presented as a pop up.
+* <li>List - includes a list. presented as a pop up.
+* <li>Screen - includes a title string and an image. presented on client's screen.
+* </ul>
+* The messages are generated based on the type of the attack, the state and the receiver of the message.
+* All attack messages are AttackMsg objects.
+* 
+* The class is created by the Game class, and is used by the attack resolver and the attack handler.
+* 
+* @author      Keren Solomon
+*/
 public class AttackMsgGenerator {
 	private static final Logger logger = LogManager.getLogger(AttackMsgGenerator.class);
 	private GameAttackState attackState;
 	
+	/**
+	 * Creates an attack message generator to handle the creation of the attack messages.
+	 * The AttackMsgGenerator class is created with an attack state member.
+	 * 
+	 * It is created by the Game class.
+	 * 
+	 * @param attackState    	represents the GameAttackState that handles the states of the attack.
+	 */
 	public AttackMsgGenerator(GameAttackState attackState) {
 		this.attackState = attackState;
 	}

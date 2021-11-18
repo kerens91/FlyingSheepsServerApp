@@ -18,6 +18,7 @@ import clientservershared.GameOver.WinType;
 import clientservershared.PickedCards;
 import game.attacks.AttackHandler;
 import game.attacks.AttackMsgGenerator;
+import game.attacks.AttackResolver;
 import game.attacks.AttacksGenerator;
 import game.cards.CardsManager;
 import game.cards.Deck;
@@ -45,6 +46,7 @@ import globals.Configs;
 * <li>cardsManager - manages the cards in the game
 * <li>attackGenerator - manages the attacks in the game
 * <li>attackHandler - handles the secondary operations required as a result of the attacks
+* <li>attackResolver - manages the attack result and finishes the attack
 * <li>attackMsgGenerator - generates the game attack messages
 * <li>gameNotifier - defines the game events
 * </ul>
@@ -67,6 +69,7 @@ public class Game {
     private AttackHandler attackHandler;
     private AttackMsgGenerator attackMsgGenerator;
     private AttacksGenerator attackGenerator;
+    private AttackResolver attackResolver;
     private EventNotifier gameNotifier;
     private CardsManager cardsManager;
     
@@ -91,6 +94,7 @@ public class Game {
         attackMsgGenerator = new AttackMsgGenerator(attackState);
     	attackHandler = new AttackHandler(attackState, playersManager, attackMsgGenerator, cardsManager, turns);
     	attackGenerator = new AttacksGenerator(attackHandler);
+    	attackResolver = new AttackResolver(attackHandler);
 	}
     
     public String getPassword() {
@@ -111,6 +115,10 @@ public class Game {
     
 	public AttackHandler getAttackHandler() {
 		return attackHandler;
+	}
+	
+	public AttackResolver getAttackResolver() {
+		return attackResolver;
 	}
 
 	public AttacksGenerator getAttackGenerator() {
