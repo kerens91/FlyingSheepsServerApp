@@ -167,11 +167,14 @@ public class CardsManager {
 	/**
 	 * This method gets the last card from game deck of cards.
 	 * It is called in each player turn in the game.
+	 * 
 	 * in case that the pulled card is null, there are no more cards in game, inform the
-	 * Game class with the status to end the game.
+	 * Game class with the status to end the game (CARD_NULL result returned)..
+	 * 
 	 * in case that the pulled card does not require any addition action, return status
-	 * to inform the Game class to end the player turn.
-	 * otherwise, this is an attack and the turn is not ended yet.
+	 * to inform the Game class to end the player turn (END_TURN result returned).
+	 * 
+	 * otherwise, this is an attack and the turn is not ended yet (DONE result returned).
 	 * 
 	 * @param player        the current playing player that gets the card from deck.
 	 * 
@@ -185,7 +188,7 @@ public class CardsManager {
     		return CARD_NULL;
     	}
     	
-    	logger.debug("get card from deck: " + card.getName());
+    	logger.debug(player.getName() + " got card from deck: " + card.getName());
     	if (CARD_END_TURN == card.playCardFromDeck(player)) {
     		logger.debug("calling end turn");
     		return END_TURN;

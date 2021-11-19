@@ -166,6 +166,7 @@ public class Deck {
 	 * 
 	 */
 	private void initCardHelper(List<CardEntity> cards) {
+		logger.debug("Initiating cards");
 		int numToCreate;
 		
 		for (CardEntity cardEntity : cards) {
@@ -177,11 +178,11 @@ public class Deck {
 				allCards.put(totalNumOfCards, card);
 				totalNumOfCards++;
 
-				if (isNatureDisasterCard.test(card)) {
+				if (!isPlayableCard.test(card)) {
 					disasterCards.add(card.getId());
 				}
 				
-				if (isPlayableCard.and(isStealCard).negate().test(card)) {
+				if (isStealCard.negate().and(isPlayableCard).test(card)) {
 					addCardToDeck(card);
 				}
 				
@@ -256,12 +257,6 @@ public class Deck {
 	* 
 	*/
 	private Predicate<AbstractCard> isPlayableCard = AbstractCard::isPlayable;
-	
-	/**
-	* A Predicate that indicates if a card is a Nature Disaster card.
-	* 
-	*/
-	private Predicate<AbstractCard> isNatureDisasterCard = isPlayableCard.negate();
 	
 	/**
 	* A Supplier of type boolean that indicates if the deck of cards is empty.

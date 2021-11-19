@@ -1,10 +1,7 @@
 package card.implementation.attack;
 
-import java.util.List;
-
 import card.types.AbstractAttackCard;
 import database.entity.CardEntity;
-import database.entity.StringEntity;
 import game.players.Player;
 
 /**

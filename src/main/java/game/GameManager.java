@@ -275,7 +275,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	*/
 	@Override
 	public void playerHandCardAdded(String clientId, int cardId) {
-		CardModel card = game.getCardInfo(cardId);
+		CardModel card = game.getCardsManager().getCardInfo(cardId);
 		socketsHandler.sendClientAddCard(clientId, card);
 	}
 
@@ -411,17 +411,20 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void doRockAttack() {
+		logger.debug("doing rock attack");
 		game.getAttackGenerator().doRockAttack();
 		game.getAttackHandler().finishAttackSuc();
 	}
 	
 	@Override
 	public void rockAttackSucceeded() {
+		logger.debug("rock attack succeeded");
 		sendAttackMsg(game.getAttackResolver().rockAttackSucceeded());
 	}
 	
 	@Override
 	public void stealAttackSucceeded() {
+		logger.debug("steal attack succeeded");
 		if (game.getAttackGenerator().doStealAttack()) {
 			// true - special card
 			game.showCoopButtonIfNeeded();
@@ -431,11 +434,13 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void stealAttackFailed() {
+		logger.debug("steal attack failed");
 		sendAttackMsg(game.getAttackResolver().stealAttackFailed());
 	}
 	
 	@Override
 	public void doRiverAttack() {
+		logger.debug("doing river attack");
 		game.getAttackGenerator().doRiverAttack();
 		game.getAttackHandler().finishAttackSuc();
 	}
@@ -447,16 +452,19 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void doTreeAttack() {
+		logger.debug("doing tree attack");
 		game.getAttackGenerator().doTreeAttack();
 	}
 	
 	@Override
 	public void treeAttackSucceeded() {
+		logger.debug("tree attack succeeded");
 		sendAttackMsg(game.getAttackResolver().treeAttackSucceeded());
 	}
 	
 	@Override
 	public void treeAttackFailed() {
+		logger.debug("tree attack failed");
 		sendAttackMsg(game.getAttackResolver().treeAttackFailed());
 	}
 	
@@ -464,6 +472,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void natureDisasterAttackSucceeded() {
+		logger.debug("nature disaster attack succeeded");
 		Player victim = game.getAttackGenerator().doNatureDisasterAttack();
 		sendAttackMsg(game.getAttackResolver().natureDisasterAttackSucceeded());
 		game.playerLoseGame(victim);
@@ -471,6 +480,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void natureDisasterAttackFailed() {
+		logger.debug("nature disaster attack failed");
 		sendAttackMsg(game.getAttackResolver().natureDisasterAttackFailed());
 	}
 	
@@ -481,7 +491,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void onAttackPlayerReq(String victimId) {
-		game.getAttackGenerator().startAttackOnOtherPlayer(game.getPlayer(victimId));
+		game.getAttackGenerator().startAttackOnOtherPlayer(game.getPlayersManager().getPlayer(victimId));
 	}
 	
 	@Override
@@ -491,7 +501,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	
 	@Override
 	public void onPlayerLostAttack(String clientId) {
-		game.noCardPicked();
+		game.getAttackHandler().noDefenseCardPicked();
 	}
 	
 	@Override
@@ -501,14 +511,15 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 
 	@Override
 	public void defenseCardPicked(AbstractCard card, Player player) {
-		game.defenseCardPicked(card, player);
+		game.getAttackHandler().defenseCardPicked(card, player);
 	}
 	
 	@Override
 	public void defenseCardPickedFlyingSheep(AbstractCard card, Player player) {
-		game.defenseCardFlyingSheepPicked(card, player);
+		game.getAttackHandler().defenseCardFlyingSheepPicked(card, player);
 	}
 
+	
 	@Override
 	public void startNatureDisasterAttack(AbstractCard card, Player player) {
 		game.getAttackGenerator().startNatureDisasterAttack(card, player);

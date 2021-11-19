@@ -46,8 +46,13 @@ public class Player {
 	/**
 	 * Creates a Player to represent a player in the game.
 	 * The Player class is created with a player id, a name and an image.
+	 * 
 	 * The player status is set to 'active', the score is initiated to 0,
 	 * and the hand list is initiated as an empty list.
+	 * 
+	 * @param playerId    the string represents the player's id.
+	 * @param name    	  the string represents the player's name.
+	 * @param img         the string represents the player's image.
 	 */
 	public Player(String playerId, String name, String img) {
 		this.playerId = playerId;
@@ -228,7 +233,7 @@ public class Player {
     * 
 	* @param   cardId    	the int represents the index of the defense card.
 	*/
-	public void removeAllExceptFlyingSheepCards(int cardId) {
+	public void removeAllExceptFlyingSheeps(int cardId) {
 		removeAllExceptFlyingSheepCardsHelper(cardId, 0);
 	}
 

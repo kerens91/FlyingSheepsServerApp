@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import attackstate.GameAttackState;
 import card.AbstractCard;
+import card.implementation.regular.StealCard;
 import card.types.AbstractOwnerableCard;
 import card.types.AbstractPlayableCard;
 import game.cards.CardsManager;
@@ -64,12 +67,10 @@ public class AttackHandler {
 	public AttackHandler(GameAttackState attackState, 
 			PlayersManager playersManager, 
 			AttackMsgGenerator msgGenerator, 
-			CardsManager cardsManager, 
 			TurnsLinkedList turns) {
 		this.attackState = attackState;
 		this.playersManager = playersManager;
 		this.msgGenerator = msgGenerator;
-		this.cardsManager = cardsManager;
 		this.turns = turns;
 		attackState.registerNotifications();
 	}
@@ -81,8 +82,12 @@ public class AttackHandler {
 	public void executeState() {
     	attackState.getState().execute();
     }
-    
-    public void finishAttackSuc() {
+	
+    public void setCardsManager(CardsManager cardsManager) {
+		this.cardsManager = cardsManager;
+	}
+
+	public void finishAttackSuc() {
     	logger.info("setting attack result succeeded");
     	attackState.setAttackResult(ATTACK_SUCCEEDED);
     	executeState();
@@ -130,14 +135,14 @@ public class AttackHandler {
     	return (attackState.getVictim().getId().equals(player.getId()));
     }
     
-    public Boolean isAttackActive() {
+    private Boolean isAttackActive() {
     	return attackState.isAttackActive();
     }
     
-    public Boolean isVictimDefended() {
+    private Boolean victimDefended() {
     	return attackState.victimDefended();
     }
-    
+        
     public PlayersManager getPlayersManager() {
 		return playersManager;
 	}
@@ -209,21 +214,43 @@ public class AttackHandler {
     	turns.setBlocked(true);
     }
     
+    
 	public void playerDefending(AbstractCard defenseCard, Player victim, Boolean isFlyingSheep) {
 		setHelperCard(defenseCard);
-		if (isVictimDefended()) {
-			if (isFlyingSheep) {
-				victim.removeAllExceptFlyingSheepCards(defenseCard.getId());
-			}
+		
+		if (victimDefended()) {
+			if (isFlyingSheep) victim.removeAllExceptFlyingSheeps(defenseCard.getId());
 			finishAttackFail();
 		}
-		else {
-			victimLoseAttack();
-		}
+		else victimLoseAttack();
 	}
 	
 	public void victimLoseAttack() {
 		finishAttackSuc();
+	}
+	
+
+	private Predicate<Player> isAttackVictim = player -> 
+		isAttackActive() && isPlayerVictim(player);
+			
+	
+	public void defenseCardPicked(AbstractCard card, Player player) {
+		if (isAttackVictim.test(player)) playerDefending(card, player, false);
+	}
+	
+	public void defenseCardFlyingSheepPicked(AbstractCard card, Player player) {
+		if (isAttackVictim.test(player)) playerDefending(card, player, true);
+	}
+	
+	public Boolean attackCardPicked(AbstractCard card, Player player) {
+		if (!isAttackActive()) return true;
+		
+		if (isPlayerVictim(player)) victimLoseAttack();
+		return false;
+	}
+	
+	public void noDefenseCardPicked() {
+		victimLoseAttack();
 	}
     
 }

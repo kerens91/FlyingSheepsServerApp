@@ -48,6 +48,7 @@ public class AttackResolver {
 		destToMsgMap.put(DEST_VICTIM, new AttackMsgWrapper(victim, msgGenerator.getMsgVicRockAttSuc()));
 		destToMsgMap.put(DEST_ALL, new AttackMsgWrapper(playersManager.getActivePlayersIds(victim), msgGenerator.getMsgAllRockAttSuc()));
 		
+		attackHandler.nextAttackState();
 		return destToMsgMap;
 	}
 	
