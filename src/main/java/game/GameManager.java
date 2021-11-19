@@ -482,6 +482,7 @@ public class GameManager implements IGameNotifications, ICardNotifications, IPla
 	public void natureDisasterAttackFailed() {
 		logger.debug("nature disaster attack failed");
 		sendAttackMsg(game.getAttackResolver().natureDisasterAttackFailed());
+		game.endTurn();
 	}
 	
 	@Override

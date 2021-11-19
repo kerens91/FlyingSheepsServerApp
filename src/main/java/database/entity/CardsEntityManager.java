@@ -96,7 +96,7 @@ public class CardsEntityManager {
 			strings.clear();
 			card = new CardEntity(TYPE_ROCK, "Rock Attack", 1, 3, 2);
 			strings.add(new StringEntity(MSG_TYPE_LIST, CS_STATE_PRE, DEST_ATTACKER, MSG_ADD_NULL, "Who would you like to throw a rock at?", MSG_ADD_NULL, card));
-			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_SUC, DEST_VICTIM, MSG_ADD_NULL, "you lost your ", MSG_ADD_CARD, card));
+			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_SUC, DEST_VICTIM, MSG_ADD_NULL, "You lost your ", MSG_ADD_CARD, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_SUC, DEST_ALL, MSG_ADD_ATT, " threw a rock on ", MSG_ADD_VIC, card));
 			card.setCardStrings(strings);
 			decore = new DecoreEntity("frameatt", "backatt", "rock", TXT_COLOR_WHITE, "points1", card);
@@ -226,11 +226,11 @@ public class CardsEntityManager {
 			
 			strings.clear();
 			card = new CardEntity(TYPE_STEAL, NAME_STEAL, 0, 0, 1);
-			strings.add(new StringEntity(MSG_TYPE_LIST, CS_STATE_PRE, DEST_ATTACKER, MSG_ADD_ATT, "Who would you like to steal from?", MSG_ADD_NULL, card));
+			strings.add(new StringEntity(MSG_TYPE_LIST, CS_STATE_PRE, DEST_ATTACKER, MSG_ADD_ATT, ", Who would you like to steal from?", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_SCREEN, CS_STATE_DO, DEST_VICTIM, MSG_ADD_ATT, " is coming at you...\nThey want to steal your herd!", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_DO, DEST_ALL, MSG_ADD_ATT, " is attacking ", MSG_ADD_VIC, card));
 			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_SUC, DEST_VICTIM, MSG_ADD_ATT, " stole your card ", MSG_ADD_CARD, card));
-			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_SUC, DEST_ATTACKER, MSG_ADD_NULL, "hey thief! you just stole ", MSG_ADD_CARD, card));
+			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_SUC, DEST_ATTACKER, MSG_ADD_NULL, "Hey thief! you just stole ", MSG_ADD_CARD, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_SUC, DEST_ALL, MSG_ADD_ATT, " stole a card from ", MSG_ADD_VIC, card));
 			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " defended himself! he used his ", MSG_ADD_CARD, card));
 			card.setCardStrings(strings);
