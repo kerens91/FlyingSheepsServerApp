@@ -3,7 +3,6 @@ package serverConnections;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +17,28 @@ import clientservershared.AttackMsg;
 import clientservershared.CardModel;
 import clientservershared.GameInfo;
 import clientservershared.GameOver;
-import eventnotifications.IClientRequestNotifications;
-import game.GameManager;
 import globals.Configs;
 import globals.Constants;
 
-
-
+/**
+* This class represents the sockets manager of the application.
+* The SocketHandler class defines the multy clients connections.
+* 
+* This class implements the runnable interface, thus has a thread that runs in the background,
+* starts a server socket and listens to clients connection on that socket.
+* 
+* Once there is a connection request, a unique string id is generated as the client id,
+* a new ClientHandler object is initiated to represent that client, and saved to the clients map with it's id.
+* Then, a new thread is created and assigned to handle that client.
+* 
+* The class maintain a HashMap to hold the clients connections, mapped by their clients IDs.
+* The class uses an executor service that provides a pool of threads, for each client connection.
+* 
+* The class offers a set of APIs used by the game manager to send messages to the clients,
+* It can be sent as broadcast message to all players, or to a specific client destination.
+* 
+* @author      Keren Solomon
+*/
 public class SocketHandler implements Runnable{
 	private static final Logger logger = LogManager.getLogger(SocketHandler.class);
 	Configs configs;

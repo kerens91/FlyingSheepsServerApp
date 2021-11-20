@@ -13,12 +13,25 @@ import clientservershared.AttackMsg;
 import clientservershared.CardModel;
 import clientservershared.GameInfo;
 import clientservershared.GameOver;
-import eventnotifications.IClientRequestNotifications;
 import message.MessageCreator;
 import message.MessageHandler;
 import message.MsgTypeEnum;
 
-
+/**
+* This class represents a client connection.
+* The ClientHandler class enables sending and receiving of messages between this server application and the client.
+* 
+* This class implements the runnable interface, thus has a thread that runs in the background,
+* listens to the socket for incoming requests.
+* 
+* Once created, the client handler initiates the in and out buffers, in which it will use to send and receive messages.
+* The class uses the services of the msgHandler class to handle the incoming requests.
+* The class uses the services of the msgCreator class to generate the messages to be sent.
+* 
+* The class offers a set of APIs used by the socket handler class to send messages to the client.
+* 
+* @author      Keren Solomon
+*/
 public class ClientHandler implements Runnable {
 	private static final Logger logger = LogManager.getLogger(ClientHandler.class);
 	private Socket socket;
