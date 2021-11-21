@@ -262,7 +262,7 @@ public class AttackMsgGenerator {
      * created the Type.titleImg type message
      */
     public AttackMsg getMsgAllNatureAttFail() {
-    	return generateMsgTwoImg(DEST_ALL, attackState.getHelperCard().getImg(), attackState.getAttackCard().getImg());
+    	return generateMsgTitleImg(DEST_ALL, attackState.getHelperCard().getImg());
     }
     
 }

@@ -57,7 +57,7 @@ public class CardsEntityManager {
 			strings.add(new StringEntity(MSG_TYPE_SCREEN, CS_STATE_DO, DEST_VICTIM, MSG_ADD_NULL, "Nature Disaster is coming at you...\nThere is a pit in your road!", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_DO, DEST_ALL, MSG_ADD_VIC, " is going to fall into a pit!", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_SUC, DEST_ALL, MSG_ADD_VIC, " is out of the game...", MSG_ADD_NULL, card));
-			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " defended himself! he used his ", MSG_ADD_CARD, card));
+			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " is saved! by using ", MSG_ADD_CARD, card));
 			card.setCardStrings(strings);
 			decore = new DecoreEntity("frameatt", "backatt", "pit", TXT_COLOR_WHITE, null, card);
 			card.setDecore(decore);
@@ -68,7 +68,7 @@ public class CardsEntityManager {
 			strings.add(new StringEntity(MSG_TYPE_SCREEN, CS_STATE_DO, DEST_VICTIM, MSG_ADD_NULL, "Nature Disaster is coming at you...\nThere is a cliff in your road!", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_DO, DEST_ALL, MSG_ADD_VIC, " is going to fall off a cliff!", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_SUC, DEST_ALL, MSG_ADD_VIC, " is out of the game...", MSG_ADD_NULL, card));
-			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " defended himself! he used his ", MSG_ADD_CARD, card));
+			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " is saved! by using ", MSG_ADD_CARD, card));
 			card.setCardStrings(strings);
 			decore = new DecoreEntity("frameatt", "backatt", "cliff", TXT_COLOR_WHITE, null, card);
 			card.setDecore(decore);
@@ -79,7 +79,7 @@ public class CardsEntityManager {
 			strings.add(new StringEntity(MSG_TYPE_SCREEN, CS_STATE_DO, DEST_VICTIM, MSG_ADD_NULL, "Nature Disaster is coming at you...\nThere is an avalanche in your road!", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_DO, DEST_ALL, MSG_ADD_VIC, " is going to encounter an avalanche!", MSG_ADD_NULL, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_SUC, DEST_ALL, MSG_ADD_VIC, " is out of the game...", MSG_ADD_NULL, card));
-			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " defended himself! he used his ", MSG_ADD_CARD, card));
+			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " is saved! by using ", MSG_ADD_CARD, card));
 			card.setCardStrings(strings);
 			decore = new DecoreEntity("frameatt", "backatt", "avalanche", TXT_COLOR_WHITE, null, card);
 			card.setDecore(decore);
@@ -232,7 +232,7 @@ public class CardsEntityManager {
 			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_SUC, DEST_VICTIM, MSG_ADD_ATT, " stole your card ", MSG_ADD_CARD, card));
 			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_SUC, DEST_ATTACKER, MSG_ADD_NULL, "Hey thief! you just stole ", MSG_ADD_CARD, card));
 			strings.add(new StringEntity(MSG_TYPE_TITLE, CS_STATE_SUC, DEST_ALL, MSG_ADD_ATT, " stole a card from ", MSG_ADD_VIC, card));
-			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " defended himself! he used his ", MSG_ADD_CARD, card));
+			strings.add(new StringEntity(MSG_TYPE_IMAGES, CS_STATE_FAIL, DEST_ALL, MSG_ADD_VIC, " is saved! by using ", MSG_ADD_CARD, card));
 			card.setCardStrings(strings);
 			decore = new DecoreEntity("frameatt", "backatt", "steal", TXT_COLOR_WHITE, null, card);
 			card.setDecore(decore);
