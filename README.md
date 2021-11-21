@@ -1,4 +1,5 @@
 This file contains a concise explanation about the application, along with a short review of the main components of the application.
+
 Please note that the code in this Git is the server side implementation of the application.
 
 In addition to this file, you may also find other reference documents in the "Addition" folder:
@@ -7,6 +8,8 @@ In addition to this file, you may also find other reference documents in the "Ad
 3. Cards Diagram - a class diagram of the cards component.
 4. Attack States - visual representation of the game attack states.
 5. Database - visual representation of the tables in the database.
+
+
 
 
 
@@ -101,6 +104,7 @@ The images in the application are created by Sarai Yahel, using Adobe Illustrato
 
 
 #############################################################
+
 The code is still in work, but in a constant improvement :) 
 Hope you will enjoy reading my code. 
 
