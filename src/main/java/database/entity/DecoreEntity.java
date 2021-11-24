@@ -10,30 +10,30 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="cardsDecoration")
+@Table(name="card_decoration")
 public class DecoreEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="DECOREID")
+	@Column(name="id")
 	private int id;
 	
-	@Column(name="FRAME")
+	@Column(name="frame")
 	private String frameImg;
 	
-	@Column(name="BACKGROUND")
+	@Column(name="background")
 	private String backImg;
 	
-	@Column(name="IMAGE")
+	@Column(name="image")
 	private String img;
 	
-	@Column(name="TEXTCOLOR")
+	@Column(name="text_color")
 	private int txtCol;
 	
-	@Column(name="POINTSIMG")
+	@Column(name="points_image")
 	private String pointsImg;
 	
 	@ManyToOne
-	@JoinColumn(name = "CARDID")
+	@JoinColumn(name = "card_id")
 	private CardEntity card;
 
 	public DecoreEntity() {}

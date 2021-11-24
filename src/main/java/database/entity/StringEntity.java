@@ -10,33 +10,33 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="cardsMessages")
+@Table(name="card_messages")
 public class StringEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="MESSAGEID")
+	@Column(name="id")
 	private int id;
 	
-	@Column(name="TYPE")
+	@Column(name="type")
 	private int type;
 	
-	@Column(name="STATE")
+	@Column(name="state")
 	private int state;
 	
-	@Column(name="DESTINATION")
+	@Column(name="destination")
 	private int dest;
 	
-	@Column(name="PRESTRING")
+	@Column(name="pre_str")
 	private int pre;
 	
-	@Column(name="STRING")
+	@Column(name="string")
 	private String string;
 	
-	@Column(name="POSTSTRING")
+	@Column(name="post_str")
 	private int post;
 	
 	@ManyToOne
-	@JoinColumn(name = "CARDID")
+	@JoinColumn(name = "card_id")
 	private CardEntity card;
 
 	public StringEntity() {}

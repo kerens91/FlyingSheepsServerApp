@@ -18,22 +18,22 @@ import javax.persistence.Table;
 public class CardEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="CARDID")
+	@Column(name="id")
 	private int id;
 	
-	@Column(name="TYPE")
+	@Column(name="type")
 	private String type;
 	
-	@Column(name="NAME")
+	@Column(name="name")
 	private String name;
 	
-	@Column(name="VALUE")
+	@Column(name="value")
 	private int value;
 	
-	@Column(name="NUMMULT")
+	@Column(name="num_mult")
 	private int mult;
 	
-	@Column(name="NUMADD")
+	@Column(name="num_add")
 	private int add;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "card")
