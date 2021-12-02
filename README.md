@@ -3,18 +3,9 @@ ________________________________________________________________________________
 
 ![imageedit_158_7735667754](https://user-images.githubusercontent.com/23153754/144446587-5b455cb1-7615-47ad-8865-6e7b89565cb6.png)
 
-## Card Game Application
-This project is a card game application written in Java.
-
-
-
-
-
-
-
-This file contains a concise explanation about the application, along with a short review of the main components of the application.
-
-Please note that the code in this Git is the server side implementation of the application.
+#### Card Game Application
+This project is the server[^1] side of a card game application written in Java.
+A short demo video of the app can be found in the link:
 
 In addition to this file, you may also find other reference documents in the "Addition" folder:
 1. About the application - description and instruction of the game.
@@ -23,12 +14,6 @@ In addition to this file, you may also find other reference documents in the "Ad
 4. Attack States - visual representation of the game attack states.
 5. Database - visual representation of the tables in the database.
 
-
-
-
-
-A short demo video of the app can be found in the link:
-ADD
 
 
 #############################################################
@@ -123,4 +108,6 @@ The code is still in work, but in a constant improvement :)
 Hope you will enjoy reading my code. 
 
 #############################################################
+
+[^1]: The application is a multi-client server application, this code is the server implementation.
 
