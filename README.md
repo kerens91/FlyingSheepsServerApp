@@ -3,8 +3,9 @@ ________________________________________________________________________________
 
 ![imageedit_158_7735667754](https://user-images.githubusercontent.com/23153754/144446587-5b455cb1-7615-47ad-8865-6e7b89565cb6.png)
 
-#### Card Game Application
+### Card Game Application
 This project is the server[^1] side of a card game application written in Java.
+
 A short demo video of the app can be found in the link:
 
 In addition to this file, you may also find other reference documents in the "Addition" folder:
