@@ -1,5 +1,8 @@
 This file contains a concise explanation about the application, along with a short review of the main components of the application.
 
+![imageedit_158_7735667754](https://user-images.githubusercontent.com/23153754/144446587-5b455cb1-7615-47ad-8865-6e7b89565cb6.png)
+
+
 Please note that the code in this Git is the server side implementation of the application.
 
 In addition to this file, you may also find other reference documents in the "Addition" folder:
