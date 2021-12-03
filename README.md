@@ -1,7 +1,8 @@
 # Welcome!
 ____________________________________________________________________________________________________
 
-<img width="373" alt="77t777" src="https://user-images.githubusercontent.com/23153754/144577090-ff081a6b-5c95-4502-a555-36f7dc0ee224.png">
+
+![imageedit_165_3871855790](https://user-images.githubusercontent.com/23153754/144578003-2079e933-ce96-4fb0-8ee4-6042d2473abd.png)
 
 
 This project is the server[^1] side of a card game application written in Java.
