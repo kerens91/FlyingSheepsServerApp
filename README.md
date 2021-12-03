@@ -8,6 +8,11 @@ ________________________________________________________________________________
 
 This project is the server[^1] side of a card game application for android devices.
 
+![imageedit_174_3880180775](https://user-images.githubusercontent.com/23153754/144589532-3d17fd70-02dd-42ca-a953-1298d8fd2670.png)
+
+
+
+
 <div class="start">
 <p align="right">
   <img src="https://user-images.githubusercontent.com/23153754/144582294-05402a68-9d40-4e2c-b214-f8463a52093f.png" width=450px height=650px />
