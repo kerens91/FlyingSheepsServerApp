@@ -74,24 +74,24 @@ The client application is an Android project written in Java using **Android Stu
 displaying the visual representation of the game, while the logic of the game is handled on the server.
 All clients will get real time updates from the server during the game.
 
-The application activities are defined in the activities package.
+The application **activities** are defined in the activities package.
 The first activity presented when starting the app is the MainActivity, that represents the main screen with the user information (name and image).
 The buttons in this screen depend on whether the user is registered.
 The RegisterActivity handles user registration and profile editing, and the Game activity is handling the game representation.
 Once the game is over the FinishGameActivity is presented with an image indicating the result.
 
-The user authentication is done by using Firebase authentication provider.
-Once registering for the first time, the user details are saved in Firebase SharedPreferences,
+The user authentication is done by using **Firebase authentication** provider.
+Once registering for the first time, the user details are saved in **Firebase SharedPreferences**,
 thus the user is not required to insert his details the next time he starts the app.
-The user can also edit his profile, which allows him to upload an image to the FirebaseStorage,
+The user can also edit his profile, which allows him to upload an image to the **FirebaseStorage**,
 thus the image can be shared with other users of the application. 
 
-The communication with the server is done through Sockets. 
+The communication with the server is done through **Sockets**. 
 The socket handling is implemented in the 'connectionservice' package.
-The ConnectionService class is a Bound Service that runs in the background when bound to the main activity,
+The ConnectionService class is a **Bound Service** that runs in the background when bound to the main activity,
 when run() is called, a new socket is created, running in a while loop listening to incoming requests.
 
-The UI and the service communicate using the MVVM architecture.
+The **UI** and the service communicate using the **MVVM architecture**.
 The UI observes the server messages, which updates for each incoming request by the service.
 The ConnectionServiceViewModel is the view-model holding the server message as a string mutable data, and also uses PriorityBlockingQueue to manage the multiple requests.
 The messages sent between the server and the client (as mentioned in the server description part) are defined in the ‘message’ package,
@@ -100,18 +100,18 @@ The ‘MsgTypeEnum’ defines the messages types, while the ‘MessageConvertor�
 The messages are sent over the socket using the google Gson library.
 
 The cards and the players in the game are handled in the ‘activityadapters’ package,
-defined by a ViewModel, and represented to the screen using RecyclerView adapters.
+defined by a ViewModel, and represented to the screen using **RecyclerView adapters**.
 The CardViewModel represents the hand of cards list, extends the ViewModel
-and enables the constant modification of the cards list by calling the adapters getValue and postValue methods.
+and enables the constant modification of the cards list by calling the adapters getValue and postValue methods.  
+
 The images in the application are created by Sarai Yahel, using Adobe Illustrator.
 
 
-#############################################################
+# Finally
 
 The code is still in work, but in a constant improvement :) 
-Hope you will enjoy reading my code. 
+Hope you will enjoy reading my code.  
 
-#############################################################
 
 [^1]: The application is a multi-client server application, this code is the server implementation.
 [^2]: I used Java version 8.
