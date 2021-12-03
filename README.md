@@ -68,13 +68,10 @@ The game manager is implementing **event** interfaces, as defined in the [eventn
 
 
 
-#############################################################
-# FlyingSheepsClientApp 
-Java code implementing the client side of the 'Flying Sheeps' application.
-#############################################################
+# About the Client 
+The client side of the application is running on an Android device constitutes the representation part of the game.
 
-This application is an Android project written in Java using Android Studio. 
-This code constitutes the client side of a multi-client server card game application.
+The client application is an Android project written in Java using Android Studio, constitutes the client side of a multi-client server card game application.
 
 The clients will run on an android device, displaying the visual representation of the game, while the logic of the game is handled on the server.
 All clients will get real time updates from the server during the game.
