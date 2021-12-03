@@ -6,7 +6,7 @@ ________________________________________________________________________________
 
 
 
-This project is the server side of a card game application for android devices.
+This project is the server[^1] side of a card game application for android devices.
 
 <div class="start">
   This project is the server[^1] side of a card game application for android devices.
