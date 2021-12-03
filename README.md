@@ -41,8 +41,8 @@ The messages sent between the server and the client are defined in the [message]
 The ‘MsgTypeEnum’ defines the messages types, while the ‘MessageConvertor’ and ‘MessageCreator’ suggest APIs for the messages creation.
 The messages are sent over the socket using the google **Gson library**. 
 
-The game logic is implemented in the ‘game’ package.
-The ‘game’ class is the core of the game, responsible for the game operations, it also makes use of other classes services,
+The game logic is implemented in the [game](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/game) package.
+The ‘Game’ class is the core of the game, responsible for the game operations, it also makes use of other classes services,
 each of which is responsible for a different part of the game:
 playersManager - manages the players in game
 cardsManager - manages the cards in the game
