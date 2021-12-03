@@ -6,9 +6,9 @@ ________________________________________________________________________________
 
 
 
-This project is the server[^1] side of a card game application written in Java.
+This project is the server[^1] side of a card game application for android devices.
 
-![imageedit_158_7735667754](https://user-images.githubusercontent.com/23153754/144446587-5b455cb1-7615-47ad-8865-6e7b89565cb6.png)
+<img width="540" alt="start" src="https://user-images.githubusercontent.com/23153754/144582036-5e339377-6e48-4557-b431-8d00f91c3d42.png">
 
 
 
