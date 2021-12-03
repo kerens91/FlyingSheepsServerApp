@@ -47,15 +47,15 @@ each of which is responsible for a different part of the game:
 playersManager - manages the players in game  
 cardsManager - manages the cards in the game  
 attackGenerator, attackHandler, attackResolver - manages the attacks in the game  
-gameNotifier - defines the game **events** sent to the game manager
+gameNotifier - defines the game events sent to the game manager
 
-The attacks are implemented using a **FSM model**, as defined in the ‘attackState’ package  (for more details see the ‘attack states’ attached in the ‘additions’ folder).
+The attacks are implemented using a **FSM model**, as defined in the [attackState](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/attackstate) package  (for more details see the [attack states](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/states.jpg) attachment).  
 The turns are handled by an implementation of a **DoublyLinkedList**, enabling circular turns mechanism, and skipping players when no longer active.
 
 The cards implementation is **OOP** based, meaning an abstract card class is defined, and all other cards are inheriting from it, categorized by card type.
-In order to understand the card types division, you can see the ‘cards class diagram’ attached to the project (in the ‘additions’ folder).
-The cards definition and implementation is under the ‘card’ package. 
-The cards data is held in a database, implemented under the ‘database’ package.
+In order to understand the card types division, you can see the [cards class diagram](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/cards%20diagram.jpg) attached to the project.  
+The cards definition and implementation is under the [card](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/card) package. 
+The cards data is held in a database, implemented under the [database](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/database) package.
 I am using **MySQL database** along with **JDBC connector** handled in the ‘DriverSQL’ class.
 The information needed to access the database is defined in the ‘persistence’ **XML** file. 
 I used **Hibernate** for the object-relational mapping, the tables are mapped to Entities, defined in the ‘entity’ sub-package,
@@ -64,7 +64,7 @@ The cards table is using card id as foreign key to the other tables.
 
 Finally, the GameManager class is a **singleton** class created once, when the application starts running, 
 and is responsible for getting events from all other app components as mentioned above.
-The game manager is implementing event interfaces, as defined in the ‘eventnotifications’ package. 
+The game manager is implementing **event** interfaces, as defined in the [eventnotifications](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/eventnotifications) package. 
 
 
 
