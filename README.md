@@ -55,7 +55,7 @@ The turns are handled by an implementation of a **DoublyLinkedList**, enabling c
 The cards implementation is **OOP** based, meaning an abstract card class is defined, and all other cards are inheriting from it, categorized by card type.
 In order to understand the card types division, you can see the [cards class diagram](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/cards%20diagram.jpg) attached to the project.  
 The cards definition and implementation is under the [card](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/card) package. 
-The cards data is pulled from the database once, and is used when a new game starts. The cards are created using the Factory pattern, handled in the 'CardFactory' class.
+The cards data is pulled from the database once, and is used when a new game starts. The cards are created using the **Factory pattern**, handled in the 'CardFactory' class.
 
 The cards data is held in a database, implemented under the [database](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/database) package.
 I am using **MySQL database** along with **JDBC connector** handled in the ‘DriverSQL’ class.
