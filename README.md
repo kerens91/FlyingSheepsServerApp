@@ -35,8 +35,7 @@ This application is a Maven project written in Java[^2].
 
 The communication is done through **Sockets**. 
 The socket handling is implemented in the [serverConnections](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/serverConnections) package.
-The SocketHandler class is implementing the Runnable interface, when run() is called, a new socket is created, running in a while loop listening to incoming requests. 
-Once a request is accepted, a new **Thread** is created to handle the client connection. 
+The SocketHandler class is implementing the Runnable interface, when run() is called, a new socket is created, running in a while loop listening to incoming requests. Once a request is accepted, a new **Thread** is created to handle the client connection[^3].  
 The messages sent between the server and the client are defined in the [message](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/message) package, as a Message object, consisting of a message type and a list of parameters.
 The ‘MsgTypeEnum’ defines the messages types, while the ‘MessageConvertor’ and ‘MessageCreator’ suggest APIs for the messages creation.
 The messages are sent over the socket using the google **Gson library**. 
@@ -57,7 +56,7 @@ In order to understand the card types division, you can see the [cards class dia
 The cards definition and implementation is under the [card](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/card) package. 
 The cards data is pulled from the database once, and is used when a new game starts. The cards are created using the **Factory pattern**, handled in the 'CardFactory' class.
 
-The cards data is held in a database[^3], implemented under the [database](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/database) package.
+The cards data is held in a database[^4], implemented under the [database](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/database) package.
 I am using **MySQL database** along with **JDBC connector** handled in the ‘DriverSQL’ class.
 The information needed to access the database is defined in the ‘persistence’ **XML** file. 
 I used **Hibernate** for the object-relational mapping, the tables are mapped to Entities, defined in the ‘entity’ sub-package,
@@ -121,5 +120,6 @@ Hope you will enjoy reading my code.
 # Notes
 [^1]: The application is a multi-client server application, this code is the server implementation.
 [^2]: I used Java version 8.
-[^3]: The initialization of the database with all the information will be managed by a separate project that constitutes the database of the application.
+[^3]: The server project will be running on a cloud server, thus will run permanently.
+[^4]: The initialization of the database with all the information will be managed by a separate project that constitutes the database of the application.
 
