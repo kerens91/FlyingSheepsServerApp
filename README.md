@@ -27,23 +27,9 @@ You may find other reference documents in the "Addition" folder:
 * [Attack States](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/states.jpg) - visual representation of the game attack states.
 * [Database](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/database%20tables%20diagram.PNG) - visual representation of the tables in the database.
 
-<div class="start">
-<p align="right">
-  <img src="https://user-images.githubusercontent.com/23153754/144582294-05402a68-9d40-4e2c-b214-f8463a52093f.png" width=450px height=650px />
-</p>
-</div>
-
-
-
-
-
-
-
-
 
 #############################################################
-# FlyingSheepsServerApp 
-Java code implementing the server side of the 'Flying Sheeps' application.
+# Project Summary
 #############################################################
 
 This application is a Maven project written in Java using Eclipse IDE. 
