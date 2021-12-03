@@ -20,17 +20,12 @@ The winner of the game is the last one left without losing to attacks, or in cas
 
 # Project Documents
 
-
-
-
-A short demo video of the app can be found in the link:
-
-In addition to this file, you may also find other reference documents in the "Addition" folder:
-1. About the application - description and instruction of the game.
-2. Class Diagram - application class diagram.
-3. Cards Diagram - a class diagram of the cards component.
-4. Attack States - visual representation of the game attack states.
-5. Database - visual representation of the tables in the database.
+You may find other reference documents in the "Addition" folder:
+* [About the application](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/About%20the%20game.pdf) - description and instruction of the game.
+* [Class Diagram](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/class%20diagram.jpg) - application class diagram.
+* [Cards Diagram](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/cards%20diagram.jpg) - a class diagram of the cards component.
+* [Attack States](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/states.jpg) - visual representation of the game attack states.
+* [Database](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/database%20tables%20diagram.PNG) - visual representation of the tables in the database.
 
 <div class="start">
 <p align="right">
