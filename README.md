@@ -44,10 +44,10 @@ The messages are sent over the socket using the google **Gson library**.
 The game logic is implemented in the [game](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/game) package.
 The ‘Game’ class is the core of the game, responsible for the game operations, it also makes use of other classes services,
 each of which is responsible for a different part of the game:
-- playersManager - manages the players in game
-- cardsManager - manages the cards in the game
-- attackGenerator, attackHandler, attackResolver - manages the attacks in the game
-- gameNotifier - defines the game **events** sent to the game manager
+  - playersManager - manages the players in game
+  - cardsManager - manages the cards in the game
+  - attackGenerator, attackHandler, attackResolver - manages the attacks in the game
+  - gameNotifier - defines the game **events** sent to the game manager
 
 The attacks are implemented using a **FSM model**, as defined in the ‘attackState’ package  (for more details see the ‘attack states’ attached in the ‘additions’ folder).
 The turns are handled by an implementation of a **DoublyLinkedList**, enabling circular turns mechanism, and skipping players when no longer active.
