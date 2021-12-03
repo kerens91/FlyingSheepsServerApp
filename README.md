@@ -108,7 +108,7 @@ and enables the constant modification of the cards list by calling the adapters 
 
 The images in the application are created by Sarai Yahel, using Adobe Illustrator.
 
-<img width="534" alt="4356456456" src="https://user-images.githubusercontent.com/23153754/144668351-73db5f3e-11a4-4875-8549-c4fadde11aea.png">
+<img width="234" alt="4356456456" src="https://user-images.githubusercontent.com/23153754/144668351-73db5f3e-11a4-4875-8549-c4fadde11aea.png">
 
 # Finally
 
