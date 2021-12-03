@@ -31,13 +31,13 @@ You may find other reference documents in the "Addition" folder:
 ____________________________________________________________________________________________________
 # Project Summary
 
-This application is a Maven project written in Java. 
+This application is a Maven project written in Java[^2]. 
 
 The communication is done through **Sockets**. 
-The socket handling is implemented in the 'serverConnections' package.
+The socket handling is implemented in the [serverConnections](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/serverConnections) package.
 The SocketHandler class is implementing the Runnable interface, when run() is called, a new socket is created, running in a while loop listening to incoming requests. 
 Once a request is accepted, a new **Thread** is created to handle the client connection. 
-The messages sent between the server and the client are defined in the ‘message’ package, as a Message object, consisting of a message type and a list of parameters.
+The messages sent between the server and the client are defined in the [message](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/message) package, as a Message object, consisting of a message type and a list of parameters.
 The ‘MsgTypeEnum’ defines the messages types, while the ‘MessageConvertor’ and ‘MessageCreator’ suggest APIs for the messages creation.
 The messages are sent over the socket using the google **Gson library**. 
 
@@ -119,4 +119,5 @@ Hope you will enjoy reading my code.
 #############################################################
 
 [^1]: The application is a multi-client server application, this code is the server implementation.
+[^2]: I used Java version 8.
 
