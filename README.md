@@ -2,7 +2,8 @@
 ____________________________________________________________________________________________________
 
 
-![imageedit_165_3871855790](https://user-images.githubusercontent.com/23153754/144578003-2079e933-ce96-4fb0-8ee4-6042d2473abd.png)
+![imageedit_167_2430171132](https://user-images.githubusercontent.com/23153754/144578230-8f331f1d-1623-4f96-a698-bee044492546.png)
+
 
 
 This project is the server[^1] side of a card game application written in Java.
