@@ -68,6 +68,7 @@ and is responsible for getting events from all other app components as mentioned
 The game manager is implementing **event** interfaces, as defined in the [eventnotifications](https://github.com/kerens91/FlyingSheepsServerApp/tree/master/src/main/java/eventnotifications) package. 
 
 
+<img width="536" alt="77t7725347" src="https://user-images.githubusercontent.com/23153754/144668169-e0c84c1c-ccb4-4a6d-827c-d299a58bde38.png">
 
 # About the Client 
 The client side of the application is running on an Android device constitutes the representation part of the game.
