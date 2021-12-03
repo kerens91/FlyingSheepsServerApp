@@ -28,8 +28,10 @@ You may find other reference documents in the "Addition" folder:
 * [Database](https://github.com/kerens91/FlyingSheepsServerApp/blob/master/Additions/database%20tables%20diagram.PNG) - visual representation of the tables in the database.
 
 
+
 #############################################################
 # Project Summary
+This file contains a concise explanation about the application, along with a short review of the main components of the application.
 #############################################################
 
 This application is a Maven project written in Java using Eclipse IDE. 
