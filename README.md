@@ -29,10 +29,11 @@ You may find other reference documents in the "Addition" folder:
 
 
 
-#############################################################
 # Project Summary
-This file contains a concise explanation about the application, along with a short review of the main components of the application.
-#############################################################
+Contains a concise explanation about the application, along with a short review of the main components of the application.
+
+#######################################################################################################################################################
+#######################################################################################################################################################
 
 This application is a Maven project written in Java using Eclipse IDE. 
 This code constitutes the server side of a multi-client server card game application.
