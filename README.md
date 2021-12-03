@@ -32,15 +32,14 @@ ________________________________________________________________________________
 # Project Summary
 
 This application is a Maven project written in Java. 
-This code constitutes the server side of a multi-client server card game application.
 
-The communication is done through Sockets. 
+The communication is done through **Sockets**. 
 The socket handling is implemented in the 'serverConnections' package.
 The SocketHandler class is implementing the Runnable interface, when run() is called, a new socket is created, running in a while loop listening to incoming requests. 
-Once a request is accepted, a new Thread is created to handle the client connection. 
+Once a request is accepted, a new **Thread** is created to handle the client connection. 
 The messages sent between the server and the client are defined in the ‘message’ package, as a Message object, consisting of a message type and a list of parameters.
 The ‘MsgTypeEnum’ defines the messages types, while the ‘MessageConvertor’ and ‘MessageCreator’ suggest APIs for the messages creation.
-The messages are sent over the socket using the google Gson library. 
+The messages are sent over the socket using the google **Gson library**. 
 
 The game logic is implemented in the ‘game’ package.
 The ‘game’ class is the core of the game, responsible for the game operations, it also makes use of other classes services,
