@@ -8,10 +8,17 @@ ________________________________________________________________________________
 
 This project is the server[^1] side of a card game application for android devices.
 
-![imageedit_174_3880180775](https://user-images.githubusercontent.com/23153754/144589532-3d17fd70-02dd-42ca-a953-1298d8fd2670.png)
+![imageedit_177_7245580684](https://user-images.githubusercontent.com/23153754/144590673-213aefbe-602c-44ba-a4be-b771adb3a441.png)
 
 
+A short demo video of the app can be found in the link:
 
+In addition to this file, you may also find other reference documents in the "Addition" folder:
+1. About the application - description and instruction of the game.
+2. Class Diagram - application class diagram.
+3. Cards Diagram - a class diagram of the cards component.
+4. Attack States - visual representation of the game attack states.
+5. Database - visual representation of the tables in the database.
 
 <div class="start">
 <p align="right">
@@ -23,14 +30,7 @@ This project is the server[^1] side of a card game application for android devic
 
 
 
-A short demo video of the app can be found in the link:
 
-In addition to this file, you may also find other reference documents in the "Addition" folder:
-1. About the application - description and instruction of the game.
-2. Class Diagram - application class diagram.
-3. Cards Diagram - a class diagram of the cards component.
-4. Attack States - visual representation of the game attack states.
-5. Database - visual representation of the tables in the database.
 
 
 
