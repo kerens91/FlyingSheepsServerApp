@@ -8,7 +8,7 @@ ________________________________________________________________________________
 
 This project is the server[^1] side of a card game application for android devices.
 
-<img width="540" alt="start" src="https://user-images.githubusercontent.com/23153754/144582036-5e339377-6e48-4557-b431-8d00f91c3d42.png">
+<img width="341" alt="start2" src="https://user-images.githubusercontent.com/23153754/144582294-05402a68-9d40-4e2c-b214-f8463a52093f.png">
 
 
 
