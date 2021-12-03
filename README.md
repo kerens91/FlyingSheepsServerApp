@@ -9,7 +9,6 @@ ________________________________________________________________________________
 This project is the server[^1] side of a card game application for android devices.
 
 <div class="start">
-  This project is the server[^1] side of a card game application for android devices.
 <p align="right">
   <img src="https://user-images.githubusercontent.com/23153754/144582294-05402a68-9d40-4e2c-b214-f8463a52093f.png" width=450px height=650px />
 </p>
