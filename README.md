@@ -4,15 +4,15 @@ ________________________________________________________________________________
 
 ![imageedit_167_2430171132](https://user-images.githubusercontent.com/23153754/144578230-8f331f1d-1623-4f96-a698-bee044492546.png)
 
-This project constitutes the server[^1] side of a card game application for android devices.
+#### This project constitutes the server[^1] side of a card game application for android devices.
 
-A short demo video of the app can be found [here](https://www.youtube.com/watch?v=8EYMkJhCYwQ&ab_channel=KerenSolomon).
+#### A short demo video of the app can be found [here](https://www.youtube.com/watch?v=8EYMkJhCYwQ&ab_channel=KerenSolomon).
 
 <p>
-#### Flying Sheep is an adventure card game where you can play against other players in real time, 
-#### you can attack other players, collect points and take cards from the deck - hope you get lucky and do not draw an attack card.
-#### During the game you can sometimes try to defend yourself - if you have the right cards for it.
-#### The winner of the game is the last one left without losing to attacks, or in case that cards run out - the winner is the player with the most points.
+Flying Sheep is an adventure card game where you can play against other players in real time, 
+you can attack other players, collect points and take cards from the deck - hope you get lucky and do not draw an attack card.
+During the game you can sometimes try to defend yourself - if you have the right cards for it.
+The winner of the game is the last one left without losing to attacks, or in case that cards run out - the winner is the player with the most points.
 </p>
 
 
