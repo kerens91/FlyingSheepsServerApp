@@ -7,8 +7,11 @@ ________________________________________________________________________________
 
 
 This project is the server[^1] side of a card game application for android devices.
-This application is a Maven project written in Java using Eclipse IDE. 
+
+This application is a Maven project written in Java using Eclipse IDE.
+
 This code constitutes the server side of a multi-client server card game application.
+
 The communication is done through Sockets. 
 
 ![imageedit_177_7245580684](https://user-images.githubusercontent.com/23153754/144590673-213aefbe-602c-44ba-a4be-b771adb3a441.png)
