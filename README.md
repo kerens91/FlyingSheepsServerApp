@@ -1,10 +1,15 @@
 # Welcome!
 ____________________________________________________________________________________________________
 
-![imageedit_158_7735667754](https://user-images.githubusercontent.com/23153754/144446587-5b455cb1-7615-47ad-8865-6e7b89565cb6.png)
+<img width="373" alt="77t777" src="https://user-images.githubusercontent.com/23153754/144577090-ff081a6b-5c95-4502-a555-36f7dc0ee224.png">
 
 
 This project is the server[^1] side of a card game application written in Java.
+
+![imageedit_158_7735667754](https://user-images.githubusercontent.com/23153754/144446587-5b455cb1-7615-47ad-8865-6e7b89565cb6.png)
+
+
+
 
 A short demo video of the app can be found in the link:
 
