@@ -112,11 +112,11 @@ The images in the application are created by Sarai Yahel, using Adobe Illustrato
 The code is still in work, but in a constant improvement :) 
 Hope you will enjoy reading my code.  
   
+  
 
   
   
 # Notes
-
 [^1]: The application is a multi-client server application, this code is the server implementation.
 [^2]: I used Java version 8.
 
