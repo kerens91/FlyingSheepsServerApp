@@ -31,7 +31,7 @@ You may find other reference documents in the "Addition" folder:
 ____________________________________________________________________________________________________
 # Project Summary
 
-This application is a Maven project written in Java using Eclipse IDE. 
+This application is a Maven project written in Java. 
 This code constitutes the server side of a multi-client server card game application.
 
 The communication is done through Sockets. 
